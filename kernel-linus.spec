@@ -23,11 +23,11 @@
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kstable wich are either 0 (empty), rc (kpatch) or stable release (kstable)
-%define kpatch		rc3
+%define kpatch		rc7
 %define kstable		0
 
 # this is the releaseversion
-%define mdvrelease 	4
+%define mdvrelease 	1
 
 # This is only to make life easier for people that creates derivated kernels
 # a.k.a name it kernel-tmb :)
@@ -137,8 +137,7 @@ Source1:        ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchl
 
 Source4:  README.kernel-sources
 Source5:  README.MandrivaLinux
-
-Source10: README.kernel-linus.urpmi
+Source6:  README.kernel-linus.urpmi
 
 Source20: i386.config
 Source21: i386-smp.config
@@ -159,11 +158,11 @@ Source25: sparc64-smp.config
 # Pre linus patch: ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/testing
 
 %if %kpatch
-Patch1:         ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/testing/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}
+Patch1:         ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/testing/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}.bz2
 Source10:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/testing/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}.bz2.sign
 %endif
 %if %kstable
-Patch1:         ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/patch-%{kversion}
+Patch1:         ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/patch-%{kversion}.bz2
 Source10:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/patch-%{kversion}.bz2.sign
 %endif
 
@@ -591,6 +590,9 @@ SaveDevel() {
 	mkdir -p $DevelRoot/arch/s390/crypto/
 	cp -fR arch/s390/crypto/Kconfig $DevelRoot/arch/s390/crypto/
 	
+        # Needed for truecrypt build (Danny)
+	cp -fR drivers/md/dm.h $DevelRoot/drivers/md/
+
 	# fix permissions
 	chmod a+rX $DevelRoot
 }
@@ -677,7 +679,7 @@ PrepareKernel "" %{buildrpmrel}custom
 %install
 install -m 644 %{SOURCE4}  .
 install -m 644 %{SOURCE5}  .
-install -m 644 %{SOURCE10}  README.urpmi
+install -m 644 %{SOURCE6}  README.urpmi
 
 cd %src_dir
 # Directories definition needed for installing
@@ -721,6 +723,11 @@ for i in alpha arm arm26 avr32 cris frv h8300 ia64 mips m32r m68k m68knommu pari
 	mkdir -p %{target_smp_devel}/arch/s390/crypto/
 	cp -fR arch/s390/crypto/Kconfig %{target_up_devel}/arch/s390/crypto/
 	cp -fR arch/s390/crypto/Kconfig %{target_smp_devel}/arch/s390/crypto/
+
+        # Needed for truecrypt build (Danny)
+	cp -fR drivers/md/dm.h %{target_up_devel}/drivers/md/
+	cp -fR drivers/md/dm.h %{target_smp_devel}/drivers/md/
+
 %endif	
 done
 
@@ -1167,5 +1174,535 @@ exit 0
 
 
 
+%changelog
+* Sun Apr 22 2007 Thomas Backlund <tmb@mandriva.org> 2.6.21-0.rc7.1mdv
+- update to 2.6.21-rc7
+- update defconfigs
+- enable CONFIG_X86_P4_CLOCKMOD again
+- fix README.urpmi on -rc and -stable builds
+- add drivers/md/dm.h to -devel rpms, needed for truecrypt builds (Danny)
 
+* Wed Mar 21 2007 Thomas Backlund <tmb@mandriva.org> 2.6.21-0.rc3.4mdv
+- add arch/s390/crypto/Kconfig for now, until fixed upstream,
+  closes #29074, and fixes kernel-linus part of #29744
 
+* Sun Mar 18 2007 Thomas Backlund <tmb@mandriva.org> 2.6.21-0.rc3.3mdv
+- fix typo in -devel post script (Charles A Edwards)
+- make the build work even if you only build up or smp (Charles A Edwards)
+- fix typo in -smp-devel post script
+
+* Thu Mar 15 2007 Thomas Backlund <tmb@mandriva.org> 2.6.21-0.rc3.2mdv
+- fix typo in post script (#29395)
+- CFQ is now the default i/o scheduler
+
+* Wed Mar 07 2007 Thomas Backlund <tmb@mandriva.org> 2.6.21-0.rc3.1mdv
+- update to kernel.org 2.6.21-rc3
+- disable CONFIG_X86_P4_CLOCKMOD (broken build)
+- update defconfigs
+
+* Tue Mar 06 2007 Thomas Backlund <tmb@mandriva.org> 2.6.21-0.rc2.2mdv
+- disable CONFIG_ACORN_PARTITION_CUMANA (#29006)
+- rename *-headers rpms to more appropriate *-devel
+- make make *-devel-latest obsolete *-headers-latest to enable automatic update
+
+* Wed Feb 28 2007 Thomas Backlund <tmb@mandriva.org> 2.6.21-0.rc2.1mdv
+- update to kernel.org 2.6.21-rc2
+- add patch101: fixes build on i386 and x86_64, from upsrteam linux-2.6.git,
+  will be removed when 2.6.21-rc3 is released.
+- update defconfigs
+
+* Sat Feb 24 2007 Thomas Backlund <tmb@mandriva.org> 2.6.21-0.rc1.1mdv
+- update to kernel.org 2.6.21-rc1
+- update defconfigs
+
+* Wed Feb 21 2007 Thomas Backlund <tmb@mandriva.org> 2.6.20.1-2mdv
+- add missing /arch/i386/kernel/sigframe.h in header rpms (#28843)
+
+* Wed Feb 21 2007 Thomas Backlund <tmb@mandriva.org> 2.6.20.1-1mdv
+- update to kernel.org 2.6.20.1
+  o Fix a free-wrong-pointer bug in nfs/acl server (CVE-2007-0772)
+  
+* Mon Feb 19 2007 Thomas Backlund <tmb@mandriva.org> 2.6.20-3mdv
+- add README.urpmi with info specific for this kernel set
+- drop all patches, this kernel _has_ to stay unpatched, as it's
+  a precompiled kernel.org reference kernel
+
+* Sat Feb 17 2007 Thomas Backlund <tmb@mandriva.org> 2.6.20-2mdv
+- fix RC versioning
+- enable KVM support (requested by ahasenack)
+- fix the whole autoconf mess
+  dont rely on /etc/init.d/kheader and /boot/kernel.h anymore
+  drop all of the old autoconf hacks     
+  drop kernel-linus-source-stripped(-latest) rpms
+  introduce kernel-linus-(smp-)headers(-latest) rpms to build 3rdparty 
+  drivers against (survives test: make mrproper oldconfig prepare scripts)
+  kernel-linus-source rpm does not include any autoconf stuff anymore
+- add bugfixes from upcoming 2.6.20.1 (will be removed when it's released)
+  01_fix-missing-critical-phys_to_virt-in-lib_swiotlb.patch
+  02_ieee1394-video1394-DMA-fix.patch
+  03_ieee1394-fix-host-device-registering-when-nodemgr-disabled.patch
+  04_fix-oops-in-xfrm_audit_log.patch
+  05_md-raid5-fix-crash.patch
+  06_md-raid5-fix-export-blk_recount_segments.patch
+  
+* Mon Feb  5 2007 Thomas Backlund <tmb@mandriva.org> 2.6.20-1mdv
+- update to kernel.org 2.6.20 final
+
+* Wed Jan 31 2007 Thomas Backlund <tmb@mandriva.org> 2.6.20.0.rc7-1mdv
+- update to kernel.org: 2.6.20-rc7
+
+* Thu Jan 25 2007 Thomas Backlund <tmb@mandriva.org> 2.6.20.0.rc6-1mdv
+- update to kernel.org: 2.6.20-rc6
+
+* Tue Jan 16 2007 Thomas Backlund <tmb@mandriva.org> 2.6.20.0.rc5-2mdv
+- fix install breakage due to spec cleanup (thanks Charles)
+- fix kernel versioning mismatch (#28237)
+
+* Sun Jan 14 2007 Thomas Backlund <tmb@mandriva.org> 2.6.20-rc5-1mdv
+- finally move on to 2.6.20-rc5
+
+* Wed Jan 10 2007 Thomas Backlund <tmb@mandriva.org> 2.6.19.2-1mdv
+- update to kernel.org 2.6.19.2:
+    - bonding: incorrect bonding state reported via ioctl
+    - dvb-core: fix bug in CRC-32 checking on 64-bit systems
+    - x86-64: Mark rdtsc as sync only for netburst, not for core2
+    - Fix for shmem_truncate_range() BUG_ON()
+    - ebtables: don't compute gap before checking struct type
+    - asix: Fix typo for AX88772 PHY Selection
+    - IPV4/IPV6: Fix inet{,6} device initialization order
+    - UDP: Fix reversed logic in udp_get_port()
+    - SPARC64: Fix "mem=xxx" handling
+    - SPARC64: Handle ISA devices with no 'regs' property
+    - SOUND: Sparc CS4231: Use 64 for period_bytes_min
+    - NET: Don't export linux/random.h outside __KERNEL__
+    - ramfs breaks without CONFIG_BLOCK
+    - i2c: fix broken ds1337 initialization
+    - fix aoe without scatter-gather [Bug 7662]
+    - handle ext3 directory corruption better (CVE-2006-6053)
+    - ext2: skip pages past number of blocks in ext2_find_entry (CVE-2006-6054)
+    - connector: some fixes for ia64 unaligned access errors
+    - SOUND: Sparc CS4231: Fix IRQ return value and initialization
+    - V4L: Fix broken TUNER_LG_NTSC_TAPE radio support
+    - V4L: cx2341x: audio_properties is an u16, not u8
+    - dm-crypt: Select CRYPTO_CBC
+    - sha512: Fix sha384 block size
+    - read_zero_pagealigned() locking fix
+    - fix OOM killing of swapoff
+    - sched: fix bad missed wakeups in the i386, x86_64, ia64, ACPI and APM idle code
+    - sparc32: add offset in pci_map_sg()
+    - V4L: cx88: Fix leadtek_eeprom tagging
+    - Revert "zd1211rw: Removed unneeded packed attributes
+    - VM: Fix nasty and subtle race in shared mmap'ed page writeback
+    - Fix incorrect user space access locking in mincore() (CVE-2006-4814)
+    - Bluetooth: Add packet size checks for CAPI messages (CVE-2006-6106)
+    - DVB: lgdt330x: fix signal / lock status detection bug
+    - cciss: fix XFER_READ/XFER_WRITE in do_cciss_request
+    - NetLabel: correctly fill in unused CIPSOv4 level and category mappings
+    - Fix up page_mkclean_one(): virtual caches, s390
+    - corrupted cramfs filesystems cause kernel oops (CVE-2006-5823)
+    - PKTGEN: Fix module load/unload races
+    - IB/srp: Fix FMR mapping for 32-bit kernels and addresses above 4G
+    - kbuild: don't put temp files in source
+    - ARM: Add sys_*at syscalls
+    - Buglet in vmscan.c
+    - i386: CPU hotplug broken with 2GB VMSPLIT
+    - ieee1394: ohci1394: add PPC_PMAC platform code to driver probe
+    - libata: handle 0xff status properly
+    - SCSI: add missing cdb clearing in scsi_execute()
+    - sched: remove __cpuinitdata anotation to cpu_isolated_ma
+    - ieee80211softmac: Fix mutex_lock at exit of ieee80211_softmac_get_genie
+    - softmac: Fixed handling of deassociation from AP
+    - zd1211rw: Call ieee80211_rx in tasklet
+    - smc911x: fix netpoll compilation faliure
+- drop Patch100: merged upstream
+- disable BLK_DEV_UB (#28058)
+- fix source-stripped provides (thanks Thierry)
+- big spec cleanup: remove all arches and flavours we dont build
+
+* Sun Jan  7 2007 Thomas Backlund <tmb@mandriva.org> 2.6.19.1-2mdv
+- fix UTS_RELEASE define in /include/linux/utsrelease.h (#28014)
+- fix utsrelease temporary location grep on i586 build
+- finally add the *-latest virtual rpms
+- add patch100: fix the file content corruption bug that appeared in 2.6.19. 
+  Will be remowed when 2.6.19.2 is released
+
+* Tue Dec 12 2006 Thomas Backlund <tmb@mandriva.org> 2.6.19.1-1mdv
+- update to kernel.org 2.6.19.1:
+    - NETLINK: Put {IFA,IFLA}_{RTA,PAYLOAD} macros back for userspace
+    - forcedeth: Disable INTx when enabling MSI in forcedeth
+    - x86: Fix boot hang due to nmi watchdog init code
+    - m32r: make userspace headers platform-independent
+    - softirq: remove BUG_ONs which can incorrectly trigger
+    - autofs: fix error code path in autofs_fill_sb()
+    - PM: Fix swsusp debug mode testproc
+    - compat: skip data conversion in compat_sys_mount when data_page is NULL
+    - drm-sis linkage fix
+    - add bottom_half.h
+    - NETLINK: Restore API compatibility of address and neighbour bits
+    - IrDA: Incorrect TTP header reservation
+    - IPSEC: Fix inetpeer leak in ipv4 xfrm dst entries
+    - USB: Fix oops in PhidgetServo
+    - XFRM: Use output device disable_xfrm for forwarded packets
+    - TOKENRING: Remote memory corruptor in ibmtr.c
+    - do_coredump() and not stopping rewrite attacks? (CVE-2006-6304)
+    - IB/ucm: Fix deadlock in cleanup
+    - softmac: fix unbalanced mutex_lock/unlock in ieee80211softmac_wx_set_mlme
+    - NETFILTER: bridge netfilter: deal with martians correctly
+    - NETFILTER: Fix iptables compat hook validation
+    - NETFILTER: Fix {ip, ip6, arp}_tables hook validation
+    - SUNHME: Fix for sunhme failures on x86
+    - PKT_SCHED act_gact: division by zero
+    - Revert "ACPI: SCI interrupt source override"
+    - cryptoloop: Select CRYPTO_CBC
+    - NET_SCHED: policer: restore compatibility with old iproute binaries
+    - EBTABLES: Prevent wraparounds in checks for entry components' sizes
+    - EBTABLES: Deal with the worst-case behaviour in loop checks
+    - EBTABLES: Verify that ebt_entries have zero ->distinguisher
+    - EBTABLES: Fix wraparounds in ebt_entries verification
+    - softmac: remove netif_tx_disable when scanning
+    - IPV6 NDISC: Calculate packet length correctly for allocation
+- drop patch100: merged upstream
+- fix autoconf
+																    
+* Wed Dec  6 2006 Thomas Backlund <tmb@mandriva.org> 2.6.19-3mdv
+- add patch100: revert: ACPI: SCI interrupt source override,
+  breaks atleast RTL8139, will be in 2.6.19.1
+- enable ARPD, IPV6_MIP6, IPV6_MULTIPLE_TABLES, IPV6_ROUTE_FWMARK
+  CONFIG_GFS2_FS, GFS2_FS_LOCKING_NOLOCK, GFS2_FS_LOCKING_DLM (#27479)
+
+* Sat Dec  2 2006 Thomas Backlund <tmb@mandriva.org> 2.6.19-2mdv
+- rename kernel-2.6-linus to kernel-linus in SVN and specfile
+- fix kernel-linus srpm name (Anssi Hannula)
+
+* Fri Dec  1 2006 Thomas Backlund <tmb@mandriva.org> 2.6.19--1mdv
+- update to 2.6.19 final
+
+* Fri Nov 17 2006 Thomas Backlund <tmb@mandriva.org> 2.6.19-0.rc6-1mdv
+- update to 2.6.19-rc6
+
+* Sat Nov 11 2006 Thomas Backlund <tmb@mandriva.org> 2.6.19-0.rc5-2mdv
+- bump release to reupload
+
+* Thu Nov  9 2006 Thomas Backlund <tmb@mandriva.org> 2.6.19-0.rc5-1mdv
+- add support for stable series kernels
+- update to kernel.org 2.6.19-rc5
+
+* Wed Sep 20 2006 Thomas Backlund <tmb@mandriva.org> 2.6.18-1mdv
+- update to 2.6.18 final
+
+* Wed Sep 13 2006 Thomas Backlund <tmb@mandriva.org> 2.6.18-rc7-1mdv
+- update to 2.6.18-rc7
+
+* Wed Sep  6 2006 Thomas Backlund <tmb@mandriva.org> 2.6.18-rc6-3mdv
+- fix spec for missing UTS_RELEASE (#24889)
+
+* Tue Sep  5 2006 Thomas Backlund <tmb@mandriva.org> 2.6.18-rc6-2mdv
+- fix autoconf UTS_RELEASE relocation from version.h to 
+  utsrelease.h (#24889)
+
+* Mon Sep  4 2006 Thomas Backlund <tmb@mandriva.org> 2.6.18-rc6-1mdv
+- update to 2.6.18-rc6
+- fix rpmlint warnings
+
+* Sun Sep  3 2006 Thomas Backlund <tmb@mandriva.org> 2.6.18-rc5.6mdv
+- change source15 to fix autoconf part that bootloader-utils-1.13
+  broke (#24889)
+- fix autoconf to work with 2.6.18 series auto.conf (#24889)
+- stop building useless debug rpms
+- spec cleanup  s/mdk/mdv/g
+- update README.kernel-sources 
+- use mkrel and distsuffix to make it work for backports
+- source and source-stripped needs to conflict each other
+
+* Mon Aug 28 2006 Thomas Backlund <tmb@mandriva.org> 2.6.18-rc5-5mdv
+- Updates to 2.6.18-rc5
+- update defconfigs
+- fix target_arch on sparc64 (pkarlsen@mandriva.com)
+
+* Tue Aug  8 2006 Thomas Backlund <tmb@mandriva.org> 2.6.18-rc4-4mdv
+- Updates to 2.6.18-rc4
+- Spec cleaning
+- update defconfigs
+- update README files
+- fix previous changelog year s/2008/2006/g
+
+* Tue Jul 18 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-07-18 20:38:40 (41569)
+- Updates to 2.6.18-rc2
+
+* Sun Jul 09 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-07-09 16:54:32 (38600)
+- Updates to 2.6.18-rc1
+
+* Tue Jun 20 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-06-20 15:23:55 (37658)
+- Updates to 2.6.17
+- Version reset: when I started with kernel-linus I wasn't too
+  experienced with RPM packages and thought that packages' version
+  should never been reset. Doing it now.
+
+* Fri Jun 09 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-06-09 15:44:06 (36901)
+- Adds new Mandriva tag
+
+* Tue Jun 06 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-06-06 16:20:10 (36699)
+- Updates to 2.6.17-rc6
+
+* Mon May 29 2006 Andreas Hasenack <andreas@mandriva.com>
++ 2006-05-29 14:36:37 (31646)
+- renamed mdv to packages because mdv is too generic and it's hosting only packages anyway
+
+* Thu May 25 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-05-25 17:05:48 (31590)
+- Updates to 2.6.17-rc5
+
+* Fri May 12 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-05-12 15:49:33 (27159)
+- Updates to 2.6.17-rc4
+
+* Mon May 08 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-05-08 22:18:55 (27006)
+- Fixes 'kernel-source is upgraded but kernel is not' bug (#21345)
+
+* Thu May 04 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-05-04 21:20:52 (26917)
+- Introduces PPC support, patch and .config files from Christiaan Welvaart
+  <cjw@daneel.dyndns.org>
+
+* Thu May 04 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-05-04 20:07:28 (26913)
+- x86 .configs update, the following changes have been made:
+    o OBSOLETE and non-sense options have been disabled
+    o New drivers and other interesting options (which were probably
+      not automatically enabled by the bot) have been enabled
+    o SMP kernel now supports: cpusets, 32 CPUs and 64 GB of memory
+
+* Fri Apr 28 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-04-28 16:21:36 (26756)
+- Updates sparc64 .config files, patch from Per Oyvind Karlsen
+  <pkarlsen@mandriva.com>
+
+* Thu Apr 27 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-04-27 23:02:25 (26741)
+- Updates to 2.6.17-rc3
+
+* Wed Apr 26 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-04-26 21:04:42 (26694)
+- Updates sparc64 .config files, patch from Per Oyvind Karlsen
+  <pkarlsen@mandriva.com>
+
+* Wed Apr 26 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-04-26 21:02:18 (26693)
+- This patch makes kernel image 'gzipped', it's needed to make it
+  boot properly (and also makes sparc's kernel image consistent with
+  other archs). Patch from Per Oyvind Karlsen <pkarlsen@mandriva.com>.
+
+* Wed Apr 19 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-04-19 15:31:31 (26557)
+- Updates to 2.6.17-rc2
+
+* Tue Apr 04 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-04-04 20:41:08 (26277)
+- Updates sparc64 .config files, patch from Per Oyvind Karlsen
+  <pkarlsen@mandriva.com>
+
+* Mon Apr 03 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-04-03 19:15:29 (26268)
+- Updates to 2.6.17-rc1
+
+* Mon Mar 20 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-03-20 17:13:33 (26030)
+- Updates to 2.6.16
+
+* Fri Mar 17 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-03-17 19:06:45 (26002)
+- Minor typo
+
+* Sun Mar 12 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-03-12 16:42:36 (1942)
+- Updates to 2.6.16-rc6
+
+* Tue Feb 28 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-02-28 01:09:44 (1817)
+- Updates to 2.6.16-rc5
+
+* Tue Feb 21 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-02-21 14:47:10 (1800)
+- Changes to the kernel's stack to 8k bytes, as this question is polemic
+  in two sides (proprietary drivers and performance) let's stay with the
+  kernel's default.
+
+* Sun Feb 19 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-02-19 19:53:40 (1789)
+- - Updates to 2.6.16-rc4
+
+* Wed Feb 15 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-02-15 21:35:55 (1741)
+- New version
+
+* Wed Feb 15 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-02-15 13:45:39 (1738)
+- Changes some SMP options as suggested by Arnaud Patard <apatard@mandriva.com>
+  basically, we're dropping BKL preemption support (because this is not
+  supposed to only run on desktop systems), enabling software suspend and
+  CPU hotpluging.
+
+* Tue Feb 14 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-02-14 16:44:07 (1736)
+- Introduces sparc64 support (patches from Per Oyvind Karlsen
+  <pkarlsen@mandriva.com>)
+
+* Mon Feb 13 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-02-13 16:49:28 (1730)
+- Updates to 2.6.16-rc3
+
+* Fri Feb 10 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-02-10 18:23:18 (1724)
+- Some times I'm really stupid: forgot to add the spec changelog entry
+  and to change the package's version on r1723.
+
+* Fri Feb 10 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-02-10 18:14:00 (1723)
+- Enables CONFIG_CC_OPTIMIZE_FOR_SIZE, to try to get a smaller kernel and
+  other benefits.
+
+* Fri Feb 03 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-02-03 13:51:35 (1566)
+- Introduces 'update_configs' script (from mdv2006 stable kernel)
+- Updates to 2.6.16-rc2
+
+* Sat Jan 28 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-01-28 17:12:11 (1493)
+- Minor log fix
+- Commit in behalf of Oden Eriksson <oeriksson@mandriva.com>:
+  - Fixes kernel headers generation
+  - Fixes SUBLEVEL change in the kernel`s Makefile
+  - Minor cleanups
+
+* Fri Jan 27 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-01-27 19:23:09 (1492)
+- Improves klinus_notice
+
+* Thu Jan 26 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-01-26 20:00:11 (1480)
+- Adds a note (in the package description) about kernel-linus's nature
+
+* Thu Jan 19 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-01-19 17:20:01 (1442)
+- Minor log fix, rpm prints some warnings with you write '%%prep' in the
+  changelog section
+
+* Wed Jan 18 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-01-18 22:57:31 (1441)
+- Fixes embarrassing bug which causes any *.config file to be copied
+  to the build directory
+- Comments out removal of unwanted files in %%prep section, this doesn't
+  seen to be needed anymore and can cause to wanted files to be removed too
+- Adds comments in the top file about kernel-linus known issues
+
+* Wed Jan 18 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-01-18 21:22:00 (1440)
+- New spec file name (kernel-2.6.spec is already used by other package)
+- Adds all the kernel's .config file as 'Source', that way they're
+  included in the src.rpm
+
+* Tue Jan 17 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-01-17 16:26:42 (1436)
+- Updates to 2.6.16-rc1
+
+* Mon Jan 16 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-01-16 20:54:13 (1432)
+- Updating package version, this will be the next release
+
+* Sun Jan 15 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-01-15 20:47:24 (1429)
+- Merges kernel-2.6-linus simplifications into the trunk
+  (svn merge -r 1362:1428 svn+ssh://svn.mandriva.com/svn/mdv/branches/cooker/kernel-2.6-linus/current .)
+
+* Thu Jan 05 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-01-05 18:04:27 (1380)
+- Disables CONFIG_HWMON_DEBUG_CHIP, it's only interesting for
+  developers
+
+* Thu Jan 05 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-01-05 17:44:32 (1379)
+- Provides kernel-source package should provides 'kernel-source', this
+  makes life easier when using dkms
+
+* Tue Jan 03 2006 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2006-01-03 13:40:22 (1359)
+- Minor log fix
+- Updates to 2.6.15
+
+* Fri Dec 30 2005 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2005-12-30 16:42:34 (1356)
+- Fixes kernel-source package generation
+
+* Wed Dec 28 2005 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2005-12-28 19:17:07 (1353)
+- Updates TODO list
+
+* Wed Dec 28 2005 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2005-12-28 19:12:46 (1352)
+- Enables compilation for more architectures
+- s/ppc64/powerpc/
+- Minor %%patchlevel fix
+
+* Tue Dec 27 2005 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2005-12-27 18:32:49 (1351)
+- Fixes Makefile hardcoded values
+- Updated to 2.6.15-rc7
+
+* Tue Dec 27 2005 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2005-12-27 13:18:43 (1349)
+- Fixes Makefile hardcoded values
+
+* Mon Dec 26 2005 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2005-12-26 17:56:36 (1346)
+- reverts r1345 and r1344. I was going to update the package for 2.6.15-rc7
+  but there are some things to be done before, like a new release and tons
+  of fixes.
+
+* Mon Dec 26 2005 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2005-12-26 13:35:00 (1345)
+- Updates .config files for 2.6.15-rc7
+
+* Mon Dec 26 2005 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2005-12-26 13:21:13 (1344)
+- Updates to 2.6.15-rc7
+- Enables more archs
+- Minor Changes
+
+* Thu Dec 22 2005 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2005-12-22 19:52:16 (1343)
+- Introduces TODO list
+
+* Thu Dec 22 2005 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2005-12-22 18:57:21 (1342)
+- Minor spec file fixes
+- Changes package name to 'kernel-linus'
+- Update version
+
+* Thu Dec 22 2005 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2005-12-22 13:26:14 (1336)
+- Fixes br0ken compile with our current i386.config
+
+* Wed Dec 21 2005 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2005-12-21 21:28:55 (1330)
+- Update hardcoded value to make the thing compile
+
+* Wed Dec 21 2005 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2005-12-21 20:21:15 (1327)
+- This is a new package, removes all the changelog entries and adds the
+  relevant one
+
+* Wed Dec 21 2005 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2005-12-21 20:10:37 (1326)
+- Err, time-stamp are created automatically during build time, this files
+  pulled in at the initial import step.. They shouldn't be here.
+
+* Wed Dec 21 2005 Luiz Fernando Capitulino <lcapitulino@mandriva.com>
++ 2005-12-21 19:30:42 (1325)
+- Introduces 'kernel-2.6-linus' RPM package source tree. This new package
+  will provide the latest -rc kernels from Linus.
