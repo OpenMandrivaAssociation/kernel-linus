@@ -27,7 +27,7 @@
 %define kstable		0
 
 # this is the releaseversion
-%define mdvrelease 	1
+%define mdvrelease 	2
 
 # This is only to make life easier for people that creates derivated kernels
 # a.k.a name it kernel-tmb :)
@@ -1002,7 +1002,8 @@ exit 0
 %if %build_up
 %files -n %{kname}-devel-%{buildrel}
 # this defattr makes tree readonly, to try and work around broken dkms & co
-%defattr(0444,root,root,0555)
+#defattr(0444,root,root,0555)
+%defattr(-,root,root)
 %dir %{_up_develdir}
 %dir %{_up_develdir}/arch
 %dir %{_up_develdir}/include
@@ -1072,7 +1073,8 @@ exit 0
 %if %build_smp
 %files -n %{kname}-smp-devel-%{buildrel}
 # this defattr makes tree readonly, to try and work around broken dkms & co
-%defattr(0444,root,root,0555)
+#defattr(0444,root,root,0555)
+%defattr(-,root,root)
 %dir %{_smp_develdir}
 %dir %{_smp_develdir}/arch
 %dir %{_smp_develdir}/include
@@ -1177,6 +1179,9 @@ exit 0
 
 
 %changelog
+* Fri Apr 27 2007 Thomas Backlund <tmb@mandriva.org> 2.6.21-2mdv
+- revert read-only -devel rpms until I find a better solution...
+
 * Thu Apr 26 2007 Thomas Backlund <tmb@mandriva.org> 2.6.21-1mdv
 - update to kernel.org 2.6.21 final
 - make devel trees read-only (like in kernel-multimedia series),
