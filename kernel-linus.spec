@@ -23,7 +23,7 @@
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kstable wich are either 0 (empty), rc (kpatch) or stable release (kstable)
-%define kpatch		rc7
+%define kpatch		0
 %define kstable		0
 
 # this is the releaseversion
@@ -594,7 +594,7 @@ SaveDevel() {
 	cp -fR drivers/md/dm.h $DevelRoot/drivers/md/
 
 	# fix permissions
-	chmod a+rX $DevelRoot
+	chmod -R a+rX $DevelRoot
 }
 
 
@@ -1001,7 +1001,8 @@ exit 0
 # kernel-devel
 %if %build_up
 %files -n %{kname}-devel-%{buildrel}
-%defattr(-,root,root)
+# this defattr makes tree readonly, to try and work around broken dkms & co
+%defattr(0444,root,root,0555)
 %dir %{_up_develdir}
 %dir %{_up_develdir}/arch
 %dir %{_up_develdir}/include
@@ -1070,7 +1071,8 @@ exit 0
 # kernel-smp-devel
 %if %build_smp
 %files -n %{kname}-smp-devel-%{buildrel}
-%defattr(-,root,root)
+# this defattr makes tree readonly, to try and work around broken dkms & co
+%defattr(0444,root,root,0555)
 %dir %{_smp_develdir}
 %dir %{_smp_develdir}/arch
 %dir %{_smp_develdir}/include
@@ -1175,6 +1177,11 @@ exit 0
 
 
 %changelog
+* Thu Apr 26 2007 Thomas Backlund <tmb@mandriva.org> 2.6.21-1mdv
+- update to kernel.org 2.6.21 final
+- make devel trees read-only (like in kernel-multimedia series),
+  to try and work around broken dkms & co
+  
 * Sun Apr 22 2007 Thomas Backlund <tmb@mandriva.org> 2.6.21-0.rc7.1mdv
 - update to 2.6.21-rc7
 - update defconfigs
