@@ -24,10 +24,10 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kstable wich are either 0 (empty), rc (kpatch) or stable release (kstable)
 %define kpatch		0
-%define kstable		0
+%define kstable		1
 
 # this is the releaseversion
-%define mdvrelease 	2
+%define mdvrelease 	1
 
 # This is only to make life easier for people that creates derivated kernels
 # a.k.a name it kernel-tmb :)
@@ -1179,6 +1179,12 @@ exit 0
 
 
 %changelog
+* Sat Apr 28 2007 Thomas Backlund <tmb@mandriva.org> 2.6.21.1-1mdv
+- kernel.org 2.6.21.1
+  * IPV6: Fix for RT0 header ipv6 change
+  * IPV4: Fix OOPS'er added to netlink fib
+- Enable Tickless System (Dynamic Ticks (NO_HZ)) on i386 kernels
+
 * Fri Apr 27 2007 Thomas Backlund <tmb@mandriva.org> 2.6.21-2mdv
 - revert read-only -devel rpms until I find a better solution...
 
