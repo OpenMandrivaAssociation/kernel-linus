@@ -27,7 +27,7 @@
 %define kstable		1
 
 # this is the releaseversion
-%define mdvrelease 	1
+%define mdvrelease 	2
 
 # This is only to make life easier for people that creates derivated kernels
 # a.k.a name it kernel-tmb :)
@@ -259,12 +259,12 @@ Autoreqprov: no
 Conflicts: %{kname}-source-stripped-%{buildrel}
 
 %description -n %{kname}-source-%{buildrel}
-The kernel-source package contains the source code files for the Linux
-kernel. These source files are needed to build most C programs, since
-they depend on the constants defined in the source code. The source
-files can also be used to build a custom kernel that is better tuned to
-your particular hardware, if you are so inclined (and you know what you're
-doing).
+The %{kname}-source package contains the source code files for the Linux 
+kernel. Theese source files are only needed if you want to build your own 
+custom kernel that is better tuned to your particular hardware.
+
+If you only want the files needed to build 3rdparty (nVidia, Ati, dkms-*,...)
+drivers against, install the *-devel-* rpm that is matching your kernel.
 
 For instructions for update, see:
 http://www.mandriva.com/security/kernelupdate
@@ -1179,6 +1179,13 @@ exit 0
 
 
 %changelog
+* Thu May 17 2007 Thomas Backlund <tmb@mandriva.org> 2.6.21.1-2mdv
+- update kernel-linus-source description to point out:
+  * only needed when building own kernels
+  * othervise install a matching -devel- rpm
+- update README.urpmi for the same reason
+- enable CONFIG_TIMER_STATS (request by Michael Braun)
+
 * Sat Apr 28 2007 Thomas Backlund <tmb@mandriva.org> 2.6.21.1-1mdv
 - kernel.org 2.6.21.1
   * IPV6: Fix for RT0 header ipv6 change
