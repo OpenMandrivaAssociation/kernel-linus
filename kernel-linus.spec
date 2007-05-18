@@ -793,7 +793,7 @@ done
 
 pushd %{target_modules}
 for i in *; do
-	/sbin/depmod-25 -u -ae -b %{buildroot} -r -F %{target_boot}/System.map-$i $i
+	/sbin/depmod -u -ae -b %{buildroot} -r -F %{target_boot}/System.map-$i $i
 	echo $?
 done
 
@@ -1179,12 +1179,13 @@ exit 0
 
 
 %changelog
-* Thu May 17 2007 Thomas Backlund <tmb@mandriva.org> 2.6.21.1-2mdv
+* Fri May 18 2007 Thomas Backlund <tmb@mandriva.org> 2.6.21.1-2mdv
 - update kernel-linus-source description to point out:
   * only needed when building own kernels
   * othervise install a matching -devel- rpm
 - update README.urpmi for the same reason
 - enable CONFIG_TIMER_STATS (request by Michael Braun)
+- /sbin/depmod-25 is now renamed to /sbin/depmod
 
 * Sat Apr 28 2007 Thomas Backlund <tmb@mandriva.org> 2.6.21.1-1mdv
 - kernel.org 2.6.21.1
