@@ -767,7 +767,7 @@ done
 
 
 # other misc files
-rm -f %{target_source}/{.config.old,.config.cmd,.tmp_gas_check,.mailmap}
+rm -f %{target_source}/{.config.old,.config.cmd,.tmp_gas_check,.mailmap,.missing-syscalls.d}
 
 #endif %build_source
 %endif
