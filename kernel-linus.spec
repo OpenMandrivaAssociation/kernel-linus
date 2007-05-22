@@ -19,15 +19,15 @@
 
 %define kernelversion	2
 %define patchlevel	6
-%define sublevel	21
+%define sublevel	22
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kstable wich are either 0 (empty), rc (kpatch) or stable release (kstable)
-%define kpatch		0
-%define kstable		1
+%define kpatch		rc2
+%define kstable		0
 
 # this is the releaseversion
-%define mdvrelease 	2
+%define mdvrelease 	1
 
 # This is only to make life easier for people that creates derivated kernels
 # a.k.a name it kernel-tmb :)
@@ -1179,6 +1179,12 @@ exit 0
 
 
 %changelog
+* Tue May 22 2007 Thomas Backlund <tmb@mandriva.org> 2.6.22-0.rc2.1mdv
+- update to kernel.org 2.6.22-rc2
+- disable CONFIG_IRQBALANCE on i386-smp, in favour of the better
+  working userspace irqbalance daemon from contribs (Requested by Austin)
+- update defconfigs
+
 * Fri May 18 2007 Thomas Backlund <tmb@mandriva.org> 2.6.21.1-2mdv
 - update kernel-linus-source description to point out:
   * only needed when building own kernels
