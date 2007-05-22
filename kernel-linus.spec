@@ -705,7 +705,7 @@ chmod -R a+rX %{target_source}
 # we remove all the source files that we don't ship
 
 # first architecture files
-for i in alpha arm arm26 avr32 cris frv h8300 ia64 mips m32r m68k m68knommu parisc powerpc ppc sh sh64 s390 v850 xtensa; do
+for i in alpha arm arm26 avr32 blackfin cris frv h8300 ia64 mips m32r m68k m68knommu parisc powerpc ppc sh sh64 s390 v850 xtensa; do
 	rm -rf %{target_source}/arch/$i
 	rm -rf %{target_source}/include/asm-$i
 
@@ -1183,6 +1183,7 @@ exit 0
 - update to kernel.org 2.6.22-rc2
 - disable CONFIG_IRQBALANCE on i386-smp, in favour of the better
   working userspace irqbalance daemon from contribs (Requested by Austin)
+- remove blackfin arch files
 - update defconfigs
 
 * Fri May 18 2007 Thomas Backlund <tmb@mandriva.org> 2.6.21.1-2mdv
