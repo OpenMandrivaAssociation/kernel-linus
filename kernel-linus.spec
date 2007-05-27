@@ -250,13 +250,12 @@ http://www.mandriva.com/security/kernelupdate
 %package -n %{kname}-source-%{buildrel}
 Version:  %{fakever}
 Release:  %{fakerel}
-Provides: %{kname}-source, kernel-source
+Provides: %{kname}-source, kernel-source = %{kverrel}
 Provides: %{kname}-source-%{kernelversion}.%{patchlevel}
 Requires: glibc-devel, ncurses-devel, make, gcc, perl
 Summary:  The source code for the Linux kernel
 Group:    Development/Kernel
 Autoreqprov: no
-Conflicts: %{kname}-source-stripped-%{buildrel}
 
 %description -n %{kname}-source-%{buildrel}
 The %{kname}-source package contains the source code files for the Linux 
@@ -280,7 +279,7 @@ http://www.mandriva.com/security/kernelupdate
 %package -n %{kname}-devel-%{buildrel}
 Version:  %{fakever}
 Release:  %{fakerel}
-Provides: %{kname}-source, kernel-source
+Provides: %{kname}-source, kernel-source = %{kverrel}, kernel-devel = %{kverrel}
 Summary:  The %{kname} devel files for 3rdparty modules build
 Group:    Development/Kernel
 Autoreqprov: no
@@ -304,7 +303,7 @@ If you want to build your own kernel, you need to install the full
 %package -n %{kname}-smp-devel-%{buildrel}
 Version:  %{fakever}
 Release:  %{fakerel}
-Provides: %{kname}-smp-source, kernel-source
+Provides: %{kname}-smp-source, kernel-source = %{kverrel}, kernel-devel = %{kverrel}
 Summary:  The %{kname}-smp devel files for 3rdparty modules build
 Group:    Development/Kernel
 Autoreqprov: no
@@ -1181,6 +1180,7 @@ exit 0
 %changelog
 * Sun May 27 2007 Thomas Backlund <tmb@mandriva.org> 2.6.22-0.rc3.1mdv
 - update to kernel.org 2.6.22-rc3
+- provide versioned kernel-devel and kernel-source (MDV #31006)
 
 * Tue May 22 2007 Thomas Backlund <tmb@mandriva.org> 2.6.22-0.rc2.1mdv
 - update to kernel.org 2.6.22-rc2
