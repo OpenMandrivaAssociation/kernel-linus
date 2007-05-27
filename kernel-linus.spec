@@ -23,7 +23,7 @@
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kstable wich are either 0 (empty), rc (kpatch) or stable release (kstable)
-%define kpatch		rc2
+%define kpatch		rc3
 %define kstable		0
 
 # this is the releaseversion
@@ -1179,6 +1179,9 @@ exit 0
 
 
 %changelog
+* Sun May 27 2007 Thomas Backlund <tmb@mandriva.org> 2.6.22-0.rc3.1mdv
+- update to kernel.org 2.6.22-rc3
+
 * Tue May 22 2007 Thomas Backlund <tmb@mandriva.org> 2.6.22-0.rc2.1mdv
 - update to kernel.org 2.6.22-rc2
 - disable CONFIG_IRQBALANCE on i386-smp, in favour of the better
