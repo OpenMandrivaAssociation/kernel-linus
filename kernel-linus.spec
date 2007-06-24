@@ -27,7 +27,7 @@
 %define kstable		0
 
 # this is the releaseversion
-%define mdvrelease 	1
+%define mdvrelease 	2
 
 # This is only to make life easier for people that creates derivated kernels
 # a.k.a name it kernel-tmb :)
@@ -250,7 +250,7 @@ http://www.mandriva.com/security/kernelupdate
 %package -n %{kname}-source-%{buildrel}
 Version:  %{fakever}
 Release:  %{fakerel}
-Provides: %{kname}-source, kernel-source = %{kverrel}
+Provides: %{kname}-source, kernel-source = %{kverrel}, kernel-devel = %{kverrel}
 Provides: %{kname}-source-%{kernelversion}.%{patchlevel}
 Requires: glibc-devel, ncurses-devel, make, gcc, perl
 Summary:  The source code for the Linux kernel
@@ -279,7 +279,7 @@ http://www.mandriva.com/security/kernelupdate
 %package -n %{kname}-devel-%{buildrel}
 Version:  %{fakever}
 Release:  %{fakerel}
-Provides: %{kname}-source, kernel-source = %{kverrel}, kernel-devel = %{kverrel}
+Provides: kernel-devel = %{kverrel}
 Summary:  The %{kname} devel files for 3rdparty modules build
 Group:    Development/Kernel
 Autoreqprov: no
@@ -303,7 +303,7 @@ If you want to build your own kernel, you need to install the full
 %package -n %{kname}-smp-devel-%{buildrel}
 Version:  %{fakever}
 Release:  %{fakerel}
-Provides: %{kname}-smp-source, kernel-source = %{kverrel}, kernel-devel = %{kverrel}
+Provides: kernel-devel = %{kverrel}
 Summary:  The %{kname}-smp devel files for 3rdparty modules build
 Group:    Development/Kernel
 Autoreqprov: no
@@ -911,6 +911,25 @@ exit 0
 
 
 
+### kernel-source
+%post -n %{kname}-source-%{buildrel}
+for i in /lib/modules/%{buildrel}*; do
+	if [ -d $i ]; then
+	        rm -f $i/{build,source}
+	        ln -sf /usr/src/%{kname}-%{buildrel} $i/build
+	        ln -sf /usr/src/%{kname}-%{buildrel} $i/source
+	fi
+done
+								
+%preun -n %{kname}-source-%{buildrel}
+for i in /lib/modules/%{buildrel}/{build,source}; do
+	if [ -L $i ]; then
+		rm -f $i
+	fi
+done
+exit 0
+												
+
 ###
 ### file lists
 ###
@@ -1178,6 +1197,12 @@ exit 0
 
 
 %changelog
+* Sun Jun 24 2007 Thomas Backlund <tmb@mandriva.org> 2.6.22-0.rc5.2mdv
+- kernel-devel rpms does not provide kernel-source anymore
+- re-add build,source symlink logic to kernel-source as dkms needs it
+  and can cope with the Makefile version mismatch 
+- update README.urpmi regarding the symlinks
+
 * Sun Jun 17 2007 Thomas Backlund <tmb@mandriva.org> 2.6.22-0.rc5.1mdv
 - update to kernel.org 2.6.22-rc5
 
