@@ -23,11 +23,11 @@
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kstable wich are either 0 (empty), rc (kpatch) or stable release (kstable)
-%define kpatch		rc5
+%define kpatch		rc6
 %define kstable		0
 
 # this is the releaseversion
-%define mdvrelease 	2
+%define mdvrelease 	1
 
 # This is only to make life easier for people that creates derivated kernels
 # a.k.a name it kernel-tmb :)
@@ -177,7 +177,7 @@ Source10:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchl
 
 %define kprovides kernel = %{tar_ver}, alsa
 
-BuildRoot: 	%{_tmppath}/%{name}-%{kversion}-build
+BuildRoot: 	%{_tmppath}/%{name}-%{kversion}-build-%{_arch}
 Autoreqprov: 	no
 BuildRequires: 	gcc module-init-tools >= 0.9.15
 
@@ -1197,6 +1197,11 @@ exit 0
 
 
 %changelog
+* Mon Jun 25 2007 Thomas Backlund <tmb@mandriva.org> 2.6.22-0.rc6.1mdv
+- update to kernel.org 2.6.22-rc6
+- make buildroot arch-specific to allow dual build in same rpm tree
+- update defconfig
+
 * Sun Jun 24 2007 Thomas Backlund <tmb@mandriva.org> 2.6.22-0.rc5.2mdv
 - kernel-devel rpms does not provide kernel-source anymore
 - re-add build,source symlink logic to kernel-source as dkms needs it
