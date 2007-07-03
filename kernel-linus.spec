@@ -23,8 +23,11 @@
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kstable wich are either 0 (empty), rc (kpatch) or stable release (kstable)
-%define kpatch		rc6
+%define kpatch		rc7
 %define kstable		0
+
+# kernel.org -git patch
+%define kgit		1
 
 # this is the releaseversion
 %define mdvrelease 	1
@@ -164,6 +167,11 @@ Source10:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchl
 %if %kstable
 Patch1:         ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/patch-%{kversion}.bz2
 Source10:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/patch-%{kversion}.bz2.sign
+%endif
+# kernel.org -git
+%if %kgit
+Patch2:         ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}-git%{kgit}.bz2
+Source11:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}-git%{kgit}.bz2.sign
 %endif
 
 #END
@@ -472,6 +480,9 @@ pushd %src_dir
 %endif
 %if %kstable
 %patch1 -p1
+%endif
+%if %kgit
+%patch2 -p1
 %endif
 popd
 
@@ -1197,6 +1208,11 @@ exit 0
 
 
 %changelog
+* Tue Jul  3 2007 Thomas Backlund <tmb@mandriva.org> 2.6.22-0.rc7.1mdv
+- update to kernel.org 2.6.20-rc7
+- add support for git patches
+- update to 2.6.20-rc7-git1
+
 * Mon Jun 25 2007 Thomas Backlund <tmb@mandriva.org> 2.6.22-0.rc6.1mdv
 - update to kernel.org 2.6.22-rc6
 - make buildroot arch-specific to allow dual build in same rpm tree
