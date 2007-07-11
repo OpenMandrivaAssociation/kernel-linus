@@ -23,7 +23,7 @@
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kstable wich are either 0 (empty), rc (kpatch) or stable release (kstable)
-%define kpatch		0
+%define kpatch		1
 %define kstable		0
 
 # kernel.org -git patch
@@ -1208,6 +1208,11 @@ exit 0
 
 
 %changelog
+* Thu Jul 12 2007 Thomas Backlund <tmb@mandriva.org> 2.6.22.1-1mdv
+- update to kernel.org 2.6.22.1
+  * NETFILTER: {ip, nf}_conntrack_sctp: fix remotely triggerable 
+    NULL ptr dereference (CVE-2007-2876)
+
 * Mon Jul  9 2007 Thomas Backlund <tmb@mandriva.org> 2.6.22-1mdv
 - update to kernel.org 2.6.22 final
 - update defconfigs, make IDE modular
