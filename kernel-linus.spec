@@ -723,21 +723,30 @@ for i in alpha arm arm26 avr32 blackfin cris frv h8300 ia64 mips m32r m68k m68kn
 	mkdir -p %{target_source}/arch/s390/crypto/
 	cp -fR arch/s390/crypto/Kconfig %{target_source}/arch/s390/crypto/
 %if %build_devel
+%if %build_up
 	rm -rf %{target_up_devel}/arch/$i
 	rm -rf %{target_up_devel}/include/asm-$i
+%endif
+%if %build_smp
 	rm -rf %{target_smp_devel}/arch/$i
 	rm -rf %{target_smp_devel}/include/asm-$i
-
+%endif
 ### FIXME MDV bugs #29744, #29074, will be removed when fixed upstream
+%if %build_up
 	mkdir -p %{target_up_devel}/arch/s390/crypto/
-	mkdir -p %{target_smp_devel}/arch/s390/crypto/
 	cp -fR arch/s390/crypto/Kconfig %{target_up_devel}/arch/s390/crypto/
+%endif
+%if %build_smp
+	mkdir -p %{target_smp_devel}/arch/s390/crypto/
 	cp -fR arch/s390/crypto/Kconfig %{target_smp_devel}/arch/s390/crypto/
-
-        # Needed for truecrypt build (Danny)
+%endif
+# Needed for truecrypt build (Danny)
+%if %build_up
 	cp -fR drivers/md/dm.h %{target_up_devel}/drivers/md/
+%endif
+%if %build_smp
 	cp -fR drivers/md/dm.h %{target_smp_devel}/drivers/md/
-
+%endif
 %endif	
 done
 
@@ -748,14 +757,18 @@ done
 	rm -rf %{target_source}/include/asm-i386
 	rm -rf %{target_source}/include/asm-x86_64
 %if %build_devel
+%if %build_up
 	rm -rf %{target_up_devel}/arch/i386
 	rm -rf %{target_up_devel}/arch/x86_64
 	rm -rf %{target_up_devel}/include/asm-i386
 	rm -rf %{target_up_devel}/include/asm-x86_64
+%endif
+%if %build_smp
 	rm -rf %{target_smp_devel}/arch/i386
 	rm -rf %{target_smp_devel}/arch/x86_64
 	rm -rf %{target_smp_devel}/include/asm-i386
 	rm -rf %{target_smp_devel}/include/asm-x86_64
+%endif
 %endif
 %endif
 %ifnarch sparc sparc64
@@ -764,14 +777,18 @@ done
 	rm -rf %{target_source}/include/asm-sparc
 	rm -rf %{target_source}/include/asm-sparc64
 %if %build_devel
+%if %build_up
 	rm -rf %{target_up_devel}/arch/sparc
 	rm -rf %{target_up_devel}/arch/sparc64
 	rm -rf %{target_up_devel}/include/asm-sparc
 	rm -rf %{target_up_devel}/include/asm-sparc64
+%endif
+%if %build_smp
 	rm -rf %{target_smp_devel}/arch/sparc
 	rm -rf %{target_smp_devel}/arch/sparc64
 	rm -rf %{target_smp_devel}/include/asm-sparc
 	rm -rf %{target_smp_devel}/include/asm-sparc64
+%endif
 %endif	
 %endif
 
