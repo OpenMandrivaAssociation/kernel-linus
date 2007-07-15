@@ -84,7 +84,7 @@
 %define debug_package           %{nil}
 
 # build defines
-%define build_doc 1
+%define build_doc 0
 %define build_source 1
 %define build_devel 1
 
