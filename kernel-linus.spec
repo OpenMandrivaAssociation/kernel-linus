@@ -30,7 +30,7 @@
 %define kgit		0
 
 # this is the releaseversion
-%define mdvrelease 	1
+%define mdvrelease 	2
 
 # This is only to make life easier for people that creates derivated kernels
 # a.k.a name it kernel-tmb :)
@@ -1225,6 +1225,10 @@ exit 0
 
 
 %changelog
+* Fri Aug  3 2007 Thomas Backlund <tmb@mandriva.org> 2.6.22.1-2mdv
+- disable DEBUG_SLAB, as it's bad for performance, especially
+  under heavier loads
+  
 * Thu Jul 12 2007 Thomas Backlund <tmb@mandriva.org> 2.6.22.1-1mdv
 - update to kernel.org 2.6.22.1
   * NETFILTER: {ip, nf}_conntrack_sctp: fix remotely triggerable 
