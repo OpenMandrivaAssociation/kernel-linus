@@ -1028,6 +1028,7 @@ exit 0
 %{_kerneldir}/include/rxrpc
 %{_kerneldir}/include/keys
 %{_kerneldir}/include/rdma
+%{_kerneldir}/include/xen
 %{_kerneldir}/init
 %{_kerneldir}/ipc
 %{_kerneldir}/kernel
@@ -1100,6 +1101,7 @@ exit 0
 %{_up_develdir}/include/video
 %{_up_develdir}/include/media
 %{_up_develdir}/include/rxrpc
+%{_up_develdir}/include/xen
 %{_up_develdir}/init
 %{_up_develdir}/ipc
 %{_up_develdir}/kernel
@@ -1171,6 +1173,7 @@ exit 0
 %{_smp_develdir}/include/video
 %{_smp_develdir}/include/media
 %{_smp_develdir}/include/rxrpc
+%{_smp_develdir}/include/xen
 %{_smp_develdir}/init
 %{_smp_develdir}/ipc
 %{_smp_develdir}/kernel
@@ -1229,6 +1232,7 @@ exit 0
 - update to kernel.org 2.6.23-rc2
 - update defconfigs
 - arm26 arch is now gone
+- add xen to source and devel rpms
 
 * Fri Aug  3 2007 Thomas Backlund <tmb@mandriva.org> 2.6.22.1-2mdv
 - disable DEBUG_SLAB, as it's bad for performance, especially
