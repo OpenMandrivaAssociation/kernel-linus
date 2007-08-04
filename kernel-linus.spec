@@ -19,18 +19,18 @@
 
 %define kernelversion	2
 %define patchlevel	6
-%define sublevel	22
+%define sublevel	23
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kstable wich are either 0 (empty), rc (kpatch) or stable release (kstable)
-%define kpatch		0
-%define kstable		1
+%define kpatch		rc2
+%define kstable		0
 
 # kernel.org -git patch
 %define kgit		0
 
 # this is the releaseversion
-%define mdvrelease 	2
+%define mdvrelease 	1
 
 # This is only to make life easier for people that creates derivated kernels
 # a.k.a name it kernel-tmb :)
@@ -1225,6 +1225,10 @@ exit 0
 
 
 %changelog
+* Sat Aug  4 2007 Thomas Backlund <tmb@mandriva.org> 2.6.23-0.rc2.1mdv
+- update to kernel.org 2.6.23-rc2
+- update defconfigs
+
 * Fri Aug  3 2007 Thomas Backlund <tmb@mandriva.org> 2.6.22.1-2mdv
 - disable DEBUG_SLAB, as it's bad for performance, especially
   under heavier loads
