@@ -715,7 +715,7 @@ chmod -R a+rX %{target_source}
 # we remove all the source files that we don't ship
 
 # first architecture files
-for i in alpha arm arm26 avr32 blackfin cris frv h8300 ia64 mips m32r m68k m68knommu parisc powerpc ppc sh sh64 s390 v850 xtensa; do
+for i in alpha arm avr32 blackfin cris frv h8300 ia64 mips m32r m68k m68knommu parisc powerpc ppc sh sh64 s390 v850 xtensa; do
 	rm -rf %{target_source}/arch/$i
 	rm -rf %{target_source}/include/asm-$i
 
@@ -1228,6 +1228,7 @@ exit 0
 * Sat Aug  4 2007 Thomas Backlund <tmb@mandriva.org> 2.6.23-0.rc2.1mdv
 - update to kernel.org 2.6.23-rc2
 - update defconfigs
+- arm26 arch is now gone
 
 * Fri Aug  3 2007 Thomas Backlund <tmb@mandriva.org> 2.6.22.1-2mdv
 - disable DEBUG_SLAB, as it's bad for performance, especially
