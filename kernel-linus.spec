@@ -23,7 +23,7 @@
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kstable wich are either 0 (empty), rc (kpatch) or stable release (kstable)
-%define kpatch		rc2
+%define kpatch		rc3
 %define kstable		0
 
 # kernel.org -git patch
@@ -1228,6 +1228,9 @@ exit 0
 
 
 %changelog
+* Mon Aug 13 2007 Thomas Backlund <tmb@mandriva.org> 2.6.23-0.rc3.1mdv
+- update to kernel.org 2.6.23-rc3
+
 * Sat Aug  4 2007 Thomas Backlund <tmb@mandriva.org> 2.6.23-0.rc2.1mdv
 - update to kernel.org 2.6.23-rc2
 - update defconfigs
