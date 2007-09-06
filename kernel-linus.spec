@@ -27,10 +27,10 @@
 %define kstable		0
 
 # kernel.org -git patch
-%define kgit		0
+%define kgit		1
 
 # this is the releaseversion
-%define mdvrelease 	1
+%define mdvrelease 	2
 
 # This is only to make life easier for people that creates derivated kernels
 # a.k.a name it kernel-tmb :)
@@ -1205,6 +1205,9 @@ exit 0
 
 
 %changelog
+* Thu Sep  6 2007 Thomas Backlund <tmb@mandriva.org> 2.6.23-0.rc5.2mdv
+- update to 2.6.23-rc5-git1
+
 * Sun Sep  2 2007 Thomas Backlund <tmb@mandriva.org> 2.6.23-0.rc5.1mdv
 - update to kernel.org 2.6.23-rc5
 - fix #29744, #29074 in a cleaner way by disabling the sourcing of
