@@ -23,14 +23,14 @@
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kstable wich are either 0 (empty), rc (kpatch) or stable release (kstable)
-%define kpatch		rc5
+%define kpatch		rc6
 %define kstable		0
 
 # kernel.org -git patch
-%define kgit		1
+%define kgit		4
 
 # this is the releaseversion
-%define mdvrelease 	2
+%define mdvrelease 	1
 
 # This is only to make life easier for people that creates derivated kernels
 # a.k.a name it kernel-tmb :)
@@ -1205,6 +1205,9 @@ exit 0
 
 
 %changelog
+* Thu Sep 13 2007 Thomas Backlund <tmb@mandriva.org> 2.6.23-0.rc6.1mdv
+- update to 2.6.23-rc6-git4
+
 * Thu Sep  6 2007 Thomas Backlund <tmb@mandriva.org> 2.6.23-0.rc5.2mdv
 - update to 2.6.23-rc5-git1
 
