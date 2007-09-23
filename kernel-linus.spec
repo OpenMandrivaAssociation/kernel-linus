@@ -27,10 +27,10 @@
 %define kstable		0
 
 # kernel.org -git patch
-%define kgit		0
+%define kgit		4
 
 # this is the releaseversion
-%define mdvrelease 	1
+%define mdvrelease 	2
 
 # This is only to make life easier for people that creates derivated kernels
 # a.k.a name it kernel-tmb :)
@@ -1205,6 +1205,9 @@ exit 0
 
 
 %changelog
+* Sun Sep 23 2007 Thomas Backlund <tmb@mandriva.org> 2.6.23-0.rc7.2mdv
+- update to kernel.org 2.6.23-rc7-git4 (fixes CVE-2007-4573)
+
 * Thu Sep 20 2007 Thomas Backlund <tmb@mandriva.org> 2.6.23-0.rc7.1mdv
 - update to 2.6.23-rc7
 - update defconfigs
