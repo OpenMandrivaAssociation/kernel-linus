@@ -27,7 +27,7 @@
 %define kstable		0
 
 # kernel.org -git patch
-%define kgit		2
+%define kgit		4
 
 # this is the releaseversion
 %define mdvrelease 	1
