@@ -23,11 +23,11 @@
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kstable wich are either 0 (empty), rc (kpatch) or stable release (kstable)
-%define kpatch		rc8
+%define kpatch		0
 %define kstable		0
 
 # kernel.org -git patch
-%define kgit		2
+%define kgit		0
 
 # this is the releaseversion
 %define mdvrelease 	1
@@ -1205,6 +1205,9 @@ exit 0
 
 
 %changelog
+* Thu Oct 11 2007 Thomas Backlund <tmb@mandriva.org> 2.6.23-1mdv
+- update to kernel.org 2.6.23 final
+
 * Fri Sep 28 2007 Thomas Backlund <tmb@mandriva.org> 2.6.23-0.rc8.1mdv
 - update to kernel.org 2.6.23-rc8-git2 (fixes CVE-2007-4571)
 
