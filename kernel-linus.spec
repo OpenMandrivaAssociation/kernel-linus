@@ -24,7 +24,7 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kstable wich are either 0 (empty), rc (kpatch) or stable release (kstable)
 %define kpatch		0
-%define kstable		0
+%define kstable		1
 
 # kernel.org -git patch
 %define kgit		0
@@ -138,16 +138,19 @@ URL: 		http://www.kernel.org/
 Source0:        ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/linux-%{tar_ver}.tar.bz2
 Source1:        ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/linux-%{tar_ver}.tar.bz2.sign
 
-Source4:  README.kernel-sources
-Source5:  README.MandrivaLinux
-Source6:  README.kernel-linus.urpmi
+# This is for disabling mrproper on -devel rpms
+Source2:	disable-mrproper-in-devel-rpms.patch
 
-Source20: i386.config
-Source21: i386-smp.config
-Source22: x86_64.config
-Source23: x86_64-smp.config
-Source24: sparc64.config
-Source25: sparc64-smp.config
+Source4:  	README.kernel-sources
+Source5:  	README.MandrivaLinux
+Source6:  	README.kernel-linus.urpmi
+
+Source20: 	i386.config
+Source21: 	i386-smp.config
+Source22: 	x86_64.config
+Source23: 	x86_64-smp.config
+Source24: 	sparc64.config
+Source25: 	sparc64-smp.config
 
 
 ####################################################################
@@ -783,6 +786,16 @@ done
 # other misc files
 rm -f %{target_source}/{.config.old,.config.cmd,.tmp_gas_check,.mailmap,.missing-syscalls.d}
 
+# disable mrproper in -devel rpms
+%if %build_devel
+%if %build_up
+patch -p1 -d %{target_up_devel} -i %{SOURCE2}
+%endif
+%if %build_smp
+patch -p1 -d %{target_smp_devel} -i %{SOURCE2}
+%endif
+%endif
+
 #endif %build_source
 %endif
 
@@ -1205,6 +1218,12 @@ exit 0
 
 
 %changelog
+* Sun Oct 14 2007 Thomas Backlund <tmb@mandriva.org> 2.6.23.1-1mdv
+- update to kernel.org 2.6.23.1
+- disable mrproper target on -devel rpms to stop 3rdparty installers
+  from wiping out needed files and thereby breaking builds
+  (based on an initial patch by Danny used in kernel-multimedia series)
+
 * Thu Oct 11 2007 Thomas Backlund <tmb@mandriva.org> 2.6.23-1mdv
 - update to kernel.org 2.6.23 final
 
