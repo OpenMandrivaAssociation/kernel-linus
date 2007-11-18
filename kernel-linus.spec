@@ -19,15 +19,15 @@
 
 %define kernelversion	2
 %define patchlevel	6
-%define sublevel	23
+%define sublevel	24
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kstable wich are either 0 (empty), rc (kpatch) or stable release (kstable)
-%define kpatch		0
-%define kstable		1
+%define kpatch		rc3
+%define kstable		0
 
 # kernel.org -git patch
-%define kgit		0
+%define kgit		1
 
 # this is the releaseversion
 %define mdvrelease 	1
@@ -501,9 +501,13 @@ pushd ${RPM_SOURCE_DIR}
 
 #
 # Copy our defconfigs into place.
-for i in i386 sparc64 x86_64; do
+for i in sparc64; do
 	cp -f $i.config %{build_dir}/linux-%{tar_ver}/arch/$i/defconfig
 	cp -f $i-smp.config %{build_dir}/linux-%{tar_ver}/arch/$i/defconfig-smp
+done
+for i in i386 x86_64; do
+	cp -f $i.config %{build_dir}/linux-%{tar_ver}/arch/x86/configs/$i\_defconfig
+	cp -f $i-smp.config %{build_dir}/linux-%{tar_ver}/arch/x86/configs/$i\_defconfig-smp
 done
 popd
 
@@ -554,7 +558,11 @@ PrepareKernel() {
 	LC_ALL=C perl -p -i -e "s/^source/### source/" drivers/crypto/Kconfig
 
 	%smake -s mrproper
-	cp arch/%{target_arch}/$config_name .config
+	%ifarch %{ix86} x86_64
+		cp arch/x86/configs/%{target_arch}_$config_name .config
+	%else
+		cp arch/%{target_arch}/$config_name .config
+	%endif
 	%smake oldconfig
 }
 
@@ -592,13 +600,18 @@ SaveDevel() {
 		DevelRoot=%{temp_smp_devel}
 	fi
 	mkdir -p $DevelRoot
-	for i in $(find . -name Makefile -o -name Makefile-* -o -name Makefile.*); do cp -R --parents $i $DevelRoot;done
-	for i in $(find . -name Kconfig -o -name Kconfig.* -o -name Kbuild -o -name Kbuild.*); do cp -R --parents $i $DevelRoot;done
+	for i in $(find . -name 'Makefile*'); do cp -R --parents $i $DevelRoot;done
+	for i in $(find . -name 'Kconfig*' -o -name 'Kbuild*'); do cp -R --parents $i $DevelRoot;done
 	cp -fR include $DevelRoot
 	cp -fR scripts $DevelRoot
-	cp -fR arch/%{target_arch}/kernel/asm-offsets.{c,s} $DevelRoot/arch/%{target_arch}/kernel/
+	%ifarch %{ix86} x86_64
+		cp -fR arch/x86/kernel/asm-offsets.{c,s} $DevelRoot/arch/x86/kernel/
+		cp -fR arch/x86/kernel/asm-offsets_{32,64}.c $DevelRoot/arch/x86/kernel/
+	%else
+		cp -fR arch/%{target_arch}/kernel/asm-offsets.{c,s} $DevelRoot/arch/%{target_arch}/kernel/
+	%endif
 	%ifarch %{ix86}
-	cp -fR arch/%{target_arch}/kernel/sigframe.h $DevelRoot/arch/%{target_arch}/kernel/
+		cp -fR arch/x86/kernel/sigframe_32.h $DevelRoot/arch/x86/kernel/
 	%endif
 	cp -fR .config Module.symvers $DevelRoot
 	
@@ -742,22 +755,16 @@ done
 
 # remove arch files based on target arch
 %ifnarch %{ix86} x86_64
-	rm -rf %{target_source}/arch/i386
-	rm -rf %{target_source}/arch/x86_64
-	rm -rf %{target_source}/include/asm-i386
-	rm -rf %{target_source}/include/asm-x86_64
+	rm -rf %{target_source}/arch/x86
+	rm -rf %{target_source}/include/asm-x86
 %if %build_devel
 %if %build_up
-	rm -rf %{target_up_devel}/arch/i386
-	rm -rf %{target_up_devel}/arch/x86_64
-	rm -rf %{target_up_devel}/include/asm-i386
-	rm -rf %{target_up_devel}/include/asm-x86_64
+	rm -rf %{target_up_devel}/arch/x86
+	rm -rf %{target_up_devel}/include/asm-x86
 %endif
 %if %build_smp
-	rm -rf %{target_smp_devel}/arch/i386
-	rm -rf %{target_smp_devel}/arch/x86_64
-	rm -rf %{target_smp_devel}/include/asm-i386
-	rm -rf %{target_smp_devel}/include/asm-x86_64
+	rm -rf %{target_smp_devel}/arch/x86
+	rm -rf %{target_smp_devel}/include/asm-x86
 %endif
 %endif
 %endif
@@ -991,8 +998,7 @@ exit 0
 %{_kerneldir}/arch/sparc64
 %endif
 %ifarch %{ix86} x86_64
-%{_kerneldir}/arch/i386
-%{_kerneldir}/arch/x86_64
+%{_kerneldir}/arch/x86
 %endif
 %{_kerneldir}/arch/um
 %{_kerneldir}/block
@@ -1008,8 +1014,7 @@ exit 0
 %{_kerneldir}/include/asm-sparc64
 %endif
 %ifarch %{ix86} x86_64
-%{_kerneldir}/include/asm-i386
-%{_kerneldir}/include/asm-x86_64
+%{_kerneldir}/include/asm-x86
 %endif
 %{_kerneldir}/include/asm-um
 %{_kerneldir}/include/config
@@ -1033,8 +1038,9 @@ exit 0
 %{_kerneldir}/lib
 %{_kerneldir}/mm
 %{_kerneldir}/net
-%{_kerneldir}/security
+%{_kerneldir}/samples
 %{_kerneldir}/scripts
+%{_kerneldir}/security
 %{_kerneldir}/sound
 %{_kerneldir}/usr
 %doc README.kernel-sources
@@ -1060,8 +1066,7 @@ exit 0
 %{_up_develdir}/arch/sparc64
 %endif
 %ifarch %{ix86} x86_64
-%{_up_develdir}/arch/i386
-%{_up_develdir}/arch/x86_64
+%{_up_develdir}/arch/x86
 %endif
 %{_up_develdir}/arch/um
 %{_up_develdir}/block
@@ -1077,8 +1082,7 @@ exit 0
 %{_up_develdir}/include/asm-sparc64
 %endif
 %ifarch %{ix86} x86_64
-%{_up_develdir}/include/asm-i386
-%{_up_develdir}/include/asm-x86_64
+%{_up_develdir}/include/asm-x86
 %endif
 %{_up_develdir}/include/asm-um
 %{_up_develdir}/include/config
@@ -1102,6 +1106,7 @@ exit 0
 %{_up_develdir}/lib
 %{_up_develdir}/mm
 %{_up_develdir}/net
+%{_up_develdir}/samples
 %{_up_develdir}/scripts
 %{_up_develdir}/security
 %{_up_develdir}/sound
@@ -1128,8 +1133,7 @@ exit 0
 %{_smp_develdir}/arch/sparc64
 %endif
 %ifarch %{ix86} x86_64
-%{_smp_develdir}/arch/i386
-%{_smp_develdir}/arch/x86_64
+%{_smp_develdir}/arch/x86
 %endif
 %{_smp_develdir}/arch/um
 %{_smp_develdir}/block
@@ -1145,8 +1149,7 @@ exit 0
 %{_smp_develdir}/include/asm-sparc64
 %endif
 %ifarch %{ix86} x86_64
-%{_smp_develdir}/include/asm-i386
-%{_smp_develdir}/include/asm-x86_64
+%{_smp_develdir}/include/asm-x86
 %endif
 %{_smp_develdir}/include/asm-um
 %{_smp_develdir}/include/config
@@ -1170,6 +1173,7 @@ exit 0
 %{_smp_develdir}/lib
 %{_smp_develdir}/mm
 %{_smp_develdir}/net
+%{_smp_develdir}/samples
 %{_smp_develdir}/scripts
 %{_smp_develdir}/security
 %{_smp_develdir}/sound
@@ -1218,6 +1222,11 @@ exit 0
 
 
 %changelog
+* Sun Nov 18 2007 Thomas Backlund <tmb@mandriva.org> 2.6.24-0.rc3.1mdv
+- update to kernel.org 2.6.24-rc3-git1
+- adapt specfile for i386/x86_64 merge into x86
+- update defconfigs
+
 * Sun Oct 14 2007 Thomas Backlund <tmb@mandriva.org> 2.6.23.1-1mdv
 - update to kernel.org 2.6.23.1
 - disable mrproper target on -devel rpms to stop 3rdparty installers
