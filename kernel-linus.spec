@@ -30,7 +30,7 @@
 %define kgit		1
 
 # this is the releaseversion
-%define mdvrelease 	1
+%define mdvrelease 	2
 
 # This is only to make life easier for people that creates derivated kernels
 # a.k.a name it kernel-tmb :)
@@ -872,7 +872,7 @@ fi
 exit 0
 
 %post -n %{kname}-%{buildrel}
-/sbin/installkernel %{buildrel}
+/sbin/installkernel -L %{buildrel}
 if [ -d /usr/src/%{kname}-devel-%{buildrel} ]; then
     ln -sf /usr/src/%{kname}-devel-%{buildrel} /lib/modules/%{buildrel}/build
     ln -sf /usr/src/%{kname}-devel-%{buildrel} /lib/modules/%{buildrel}/source
@@ -895,7 +895,7 @@ fi
 exit 0
 
 %post -n %{kname}-smp-%{buildrel}
-/sbin/installkernel %{buildrel}smp
+/sbin/installkernel -L %{buildrel}smp
 if [ -d /usr/src/%{kname}-devel-%{buildrel}smp ]; then
     ln -sf /usr/src/%{kname}-devel-%{buildrel}smp /lib/modules/%{buildrel}smp/build
     ln -sf /usr/src/%{kname}-devel-%{buildrel}smp /lib/modules/%{buildrel}smp/source
@@ -1225,6 +1225,10 @@ exit 0
 
 
 %changelog
+* Tue Dec 4 2007 Thomas Backlund <tmb@mandriva.org> 2.6.24-0.rc3.2mdv
+- call installkernel with -L to avoid changing main kernel
+  default symlinks
+  
 * Sun Nov 18 2007 Thomas Backlund <tmb@mandriva.org> 2.6.24-0.rc3.1mdv
 - update to kernel.org 2.6.24-rc3-git1
 - adapt specfile for i386/x86_64 merge into x86
