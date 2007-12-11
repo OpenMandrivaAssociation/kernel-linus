@@ -23,11 +23,11 @@
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kstable wich are either 0 (empty), rc (kpatch) or stable release (kstable)
-%define kpatch		rc4
+%define kpatch		rc5
 %define kstable		0
 
 # kernel.org -git patch
-%define kgit		1
+%define kgit		0
 
 # this is the releaseversion
 %define mdvrelease 	1
@@ -1225,6 +1225,10 @@ exit 0
 
 
 %changelog
+* Tue Dec 11 2007 Thomas Backlund <tmb@mandriva.org> 2.6.24-0.rc5.1mdv
+- update to kernel.org 2.6.24-rc5
+- update defconfigs
+
 * Tue Dec 4 2007 Thomas Backlund <tmb@mandriva.org> 2.6.24-0.rc4.1mdv
 - update to kernel.org 2.6.24-rc4-git1
 - call installkernel with -L to avoid changing main kernel
