@@ -221,7 +221,7 @@ of the operating system: memory allocation, process allocation, device
 input and output, etc.
 
 For instructions for update, see:
-http://www.mandriva.com/security/kernelupdate
+http://www.mandriva.com/en/security/kernelupdate
 
 %{klinus_notice}
 
@@ -248,7 +248,7 @@ required only on machines with two or more CPUs, although it should work
 fine on single-CPU boxes.
 
 For instructions for update, see:
-http://www.mandriva.com/security/kernelupdate
+http://www.mandriva.com/en/security/kernelupdate
 
 %{klinus_notice}
 
@@ -277,7 +277,7 @@ If you only want the files needed to build 3rdparty (nVidia, Ati, dkms-*,...)
 drivers against, install the *-devel-* rpm that is matching your kernel.
 
 For instructions for update, see:
-http://www.mandriva.com/security/kernelupdate
+http://www.mandriva.com/en/security/kernelupdate
 
 %{klinus_notice}
 
@@ -349,7 +349,7 @@ package if you need a reference to the options that can be passed to Linux
 kernel modules at load time.
 
 For instructions for update, see:
-http://www.mandriva.com/security/kernelupdate
+http://www.mandriva.com/en/security/kernelupdate
 
 %{klinus_notice}
 
