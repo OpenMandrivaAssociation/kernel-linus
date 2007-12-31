@@ -22,15 +22,15 @@
 %define sublevel	24
 
 # kernel Makefile extraversion is substituted by 
-# kpatch/kstable wich are either 0 (empty), rc (kpatch) or stable release (kstable)
+# kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) or stable release (kstable)
 %define kpatch		rc6
 %define kstable		0
 
 # kernel.org -git patch
-%define kgit		0
+%define kgit		git7
 
 # this is the releaseversion
-%define mdvrelease 	1
+%define mdvrelease 	2
 
 # This is only to make life easier for people that creates derivated kernels
 # a.k.a name it kernel-tmb :)
@@ -173,8 +173,8 @@ Source10:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchl
 %endif
 # kernel.org -git
 %if %kgit
-Patch2:         ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}-git%{kgit}.bz2
-Source11:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}-git%{kgit}.bz2.sign
+Patch2:         ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}-%{kgit}.bz2
+Source11:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}-%{kgit}.bz2.sign
 %endif
 
 #END
