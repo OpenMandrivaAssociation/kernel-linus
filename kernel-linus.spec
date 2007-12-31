@@ -143,7 +143,6 @@ Source2:	disable-mrproper-in-devel-rpms.patch
 
 Source4:  	README.kernel-sources
 Source5:  	README.MandrivaLinux
-Source6:  	README.kernel-linus.urpmi
 
 Source20: 	i386.config
 Source21: 	i386-smp.config
@@ -637,7 +636,6 @@ CreateFiles() {
 	echo "%{_modulesdir}/${kernversion}/modules.*" >> $output
 	echo "%doc README.kernel-sources" >> $output
 	echo "%doc README.MandrivaLinux" >> $output
-	echo "%doc README.urpmi" >> $output
 }
 
 
@@ -704,7 +702,6 @@ PrepareKernel "" %{buildrpmrel}custom
 %install
 install -m 644 %{SOURCE4}  .
 install -m 644 %{SOURCE5}  .
-install -m 644 %{SOURCE6}  README.urpmi
 
 cd %src_dir
 # Directories definition needed for installing
@@ -1052,7 +1049,6 @@ exit 0
 %{_kerneldir}/usr
 %doc README.kernel-sources
 %doc README.MandrivaLinux
-%doc README.urpmi
 %endif
 
 %if %build_devel
@@ -1120,7 +1116,6 @@ exit 0
 %{_up_develdir}/usr
 %doc README.kernel-sources
 %doc README.MandrivaLinux
-%doc README.urpmi
 %endif
 
 # kernel-smp-devel
@@ -1187,7 +1182,6 @@ exit 0
 %{_smp_develdir}/usr
 %doc README.kernel-sources
 %doc README.MandrivaLinux
-%doc README.urpmi
 #endif %build_devel
 %endif
 %endif
