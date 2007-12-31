@@ -803,6 +803,13 @@ patch -p1 -d %{target_smp_devel} -i %{SOURCE2}
 %endif
 %endif
 
+# this ends up in the i386 build, probably a bug with latest i386/x86_64
+# merge changes in 2.6.24-rc3, for now just use a temporary fix and
+# clean it
+%ifarch %{ix86}
+unlink %{target_source}/arch/i386/boot/bzImage
+%endif
+
 #endif %build_source
 %endif
 
@@ -993,9 +1000,6 @@ exit 0
 %{_kerneldir}/Makefile
 %{_kerneldir}/README
 %{_kerneldir}/REPORTING-BUGS
-%ifarch %{ix86}
-%{_kerneldir}/arch/i386
-%endif
 %ifarch sparc sparc64
 %{_kerneldir}/arch/sparc
 %{_kerneldir}/arch/sparc64
