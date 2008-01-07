@@ -954,16 +954,20 @@ exit 0
 %post -n %{kname}-source-%{buildrel}
 for i in /lib/modules/%{buildrel}*; do
 	if [ -d $i ]; then
-	        rm -f $i/{build,source}
-	        ln -sf /usr/src/%{kname}-%{buildrel} $i/build
-	        ln -sf /usr/src/%{kname}-%{buildrel} $i/source
+		if [ ! -L $i/build -a ! -L $i/source ]; then
+			rm -f $i/{build,source}
+		        ln -sf /usr/src/%{kname}-%{buildrel} $i/build
+		        ln -sf /usr/src/%{kname}-%{buildrel} $i/source
+		fi
 	fi
 done
 								
 %preun -n %{kname}-source-%{buildrel}
 for i in /lib/modules/%{buildrel}/{build,source}; do
 	if [ -L $i ]; then
-		rm -f $i
+		if [ "$(readlink $i)" = "/usr/src/%{kname}-%{buildrel}" ]; then
+			rm -f $i
+		fi
 	fi
 done
 exit 0
