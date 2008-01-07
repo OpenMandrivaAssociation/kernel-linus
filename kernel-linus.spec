@@ -128,7 +128,7 @@ License: 	GPL
 Group: 		System/Kernel and hardware
 ExclusiveArch: 	%{ix86} x86_64 sparc64
 ExclusiveOS: 	Linux
-URL: 		http://www.kernel.org/
+URL: 		http://wiki.mandriva.com/en/Docs/Howto/Mandriva_Kernels#kernel-linus
 
 ####################################################################
 #
