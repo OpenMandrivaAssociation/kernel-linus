@@ -212,6 +212,9 @@ Requires: 	%requires1
 Requires: 	%requires2
 Requires: 	%requires3
 Requires: 	%requires4
+%ifarch %{ix86}	
+Conflicts:	arch(x86_64)
+%endif
 
 %description -n %{kname}-%{buildrel}
 The kernel package contains the Linux kernel (vmlinuz), the core of your
@@ -231,15 +234,18 @@ http://www.mandriva.com/en/security/kernelupdate
 #
 
 %package -n %{kname}-smp-%{buildrel}
-Version:  %{fakever}
-Release:  %{fakerel}
-Summary:  The Linux Kernel compiled for SMP machines
-Group: 	  System/Kernel and hardware
-Provides: %kprovides
-Requires: %requires1
-Requires: %requires2
-Requires: %requires3
-Requires: %requires4
+Version:	%{fakever}
+Release:	%{fakerel}
+Summary:	The Linux Kernel compiled for SMP machines
+Group:		System/Kernel and hardware
+Provides:	%kprovides
+Requires:	%requires1
+Requires:	%requires2
+Requires:	%requires3
+Requires:	%requires4
+%ifarch %{ix86}	
+Conflicts:	arch(x86_64)
+%endif
 
 %description -n %{kname}-smp-%{buildrel}
 This package includes a SMP version of the Linux %{kversion} kernel. It is
@@ -258,14 +264,17 @@ http://www.mandriva.com/en/security/kernelupdate
 #
 
 %package -n %{kname}-source-%{buildrel}
-Version:  %{fakever}
-Release:  %{fakerel}
-Provides: %{kname}-source, kernel-source = %{kverrel}, kernel-devel = %{kverrel}
-Provides: %{kname}-source-%{kernelversion}.%{patchlevel}
-Requires: glibc-devel, ncurses-devel, make, gcc, perl
-Summary:  The source code for the Linux kernel
-Group:    Development/Kernel
-Autoreqprov: no
+Version:	%{fakever}
+Release:	%{fakerel}
+Provides:	%{kname}-source, kernel-source = %{kverrel}, kernel-devel = %{kverrel}
+Provides:	%{kname}-source-%{kernelversion}.%{patchlevel}
+Requires:	glibc-devel, ncurses-devel, make, gcc, perl
+Summary:	The source code for the Linux kernel
+Group:		Development/Kernel
+Autoreqprov: 	no
+%ifarch %{ix86}	
+Conflicts:	arch(x86_64)
+%endif
 
 %description -n %{kname}-source-%{buildrel}
 The %{kname}-source package contains the source code files for the Linux 
@@ -287,13 +296,16 @@ http://www.mandriva.com/en/security/kernelupdate
 #
 
 %package -n %{kname}-devel-%{buildrel}
-Version:  %{fakever}
-Release:  %{fakerel}
-Provides: kernel-devel = %{kverrel}
-Summary:  The %{kname} devel files for 3rdparty modules build
-Group:    Development/Kernel
-Autoreqprov: no
-Requires: glibc-devel, ncurses-devel, make, gcc, perl
+Version:	%{fakever}
+Release:	%{fakerel}
+Provides:	kernel-devel = %{kverrel}
+Summary:	The %{kname} devel files for 3rdparty modules build
+Group:		Development/Kernel
+Autoreqprov:	no
+Requires:	glibc-devel, ncurses-devel, make, gcc, perl
+%ifarch %{ix86}	
+Conflicts:	arch(x86_64)
+%endif
 
 %description -n %{kname}-devel-%{buildrel}
 This package contains the kernel-devel files that should be enough to build 
@@ -311,13 +323,16 @@ If you want to build your own kernel, you need to install the full
 #
 
 %package -n %{kname}-smp-devel-%{buildrel}
-Version:  %{fakever}
-Release:  %{fakerel}
-Provides: kernel-devel = %{kverrel}
-Summary:  The %{kname}-smp devel files for 3rdparty modules build
-Group:    Development/Kernel
-Autoreqprov: no
-Requires: glibc-devel, ncurses-devel, make, gcc, perl
+Version:	%{fakever}
+Release:	%{fakerel}
+Provides:	kernel-devel = %{kverrel}
+Summary:	The %{kname}-smp devel files for 3rdparty modules build
+Group:		Development/Kernel
+Autoreqprov:	no
+Requires:	glibc-devel, ncurses-devel, make, gcc, perl
+%ifarch %{ix86}	
+Conflicts:	arch(x86_64)
+%endif
 
 %description -n %{kname}-smp-devel-%{buildrel}
 This package contains the kernel-devel files that should be enough to build 
@@ -335,10 +350,13 @@ If you want to build your own kernel, you need to install the full
 #
 
 %package -n %{kname}-doc-%{buildrel}
-Version:  %{fakever}
-Release:  %{fakerel}
-Summary:  Various documentation bits found in the kernel source
-Group:    Books/Computer books
+Version:	%{fakever}
+Release:	%{fakerel}
+Summary:	Various documentation bits found in the kernel source
+Group:		Books/Computer books
+%ifarch %{ix86}	
+Conflicts:	arch(x86_64)
+%endif
 
 %description -n %{kname}-doc-%{buildrel}
 This package contains documentation files form the kernel source. Various
@@ -364,6 +382,9 @@ Release:        %{rpmrel}
 Summary: 	Virtual rpm for latest %{kname}
 Group: 	  	System/Kernel and hardware
 Requires: 	%{kname}-%{buildrel}
+%ifarch %{ix86}	
+Conflicts:	arch(x86_64)
+%endif
 
 %description -n %{kname}-latest
 This package is a virtual rpm that aims to make sure you always have the
@@ -383,6 +404,9 @@ Release:        %{rpmrel}
 Summary: 	Virtual rpm for latest %{kname}-smp
 Group: 	  	System/Kernel and hardware
 Requires: 	%{kname}-smp-%{buildrel}
+%ifarch %{ix86}	
+Conflicts:	arch(x86_64)
+%endif
 
 %description -n %{kname}-smp-latest
 This package is a virtual rpm that aims to make sure you always have the
@@ -402,6 +426,9 @@ Release:        %{rpmrel}
 Summary: 	Virtual rpm for latest %{kname}-source
 Group: 	  	System/Kernel and hardware
 Requires: 	%{kname}-source-%{buildrel}
+%ifarch %{ix86}	
+Conflicts:	arch(x86_64)
+%endif
 
 %description -n %{kname}-source-latest
 This package is a virtual rpm that aims to make sure you always have the
@@ -422,6 +449,9 @@ Summary: 	Virtual rpm for latest %{kname}-devel
 Group: 	  	System/Kernel and hardware
 Requires: 	%{kname}-devel-%{buildrel}
 Obsoletes:	%{kname}-headers-latest
+%ifarch %{ix86}	
+Conflicts:	arch(x86_64)
+%endif
 
 %description -n %{kname}-devel-latest
 This package is a virtual rpm that aims to make sure you always have the
@@ -442,6 +472,9 @@ Summary: 	Virtual rpm for latest %{kname}-smp-devel
 Group: 	  	System/Kernel and hardware
 Requires: 	%{kname}-smp-devel-%{buildrel}
 Obsoletes:	%{kname}-smp-headers-latest
+%ifarch %{ix86}	
+Conflicts:	arch(x86_64)
+%endif
 
 %description -n %{kname}-smp-devel-latest
 This package is a virtual rpm that aims to make sure you always have the
@@ -461,6 +494,9 @@ Release:        %{rpmrel}
 Summary: 	Virtual rpm for latest %{kname}-doc
 Group: 	  	System/Kernel and hardware
 Requires: 	%{kname}-doc-%{buildrel}
+%ifarch %{ix86}	
+Conflicts:	arch(x86_64)
+%endif
 
 %description -n %{kname}-doc-latest
 This package is a virtual rpm that aims to make sure you always have the
