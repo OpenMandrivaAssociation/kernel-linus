@@ -27,7 +27,7 @@
 %define kstable		0
 
 # kernel.org -git patch
-%define kgit		git3
+%define kgit		git4
 
 # this is the releaseversion
 %define mdvrelease 	1
@@ -830,7 +830,7 @@ done
 
 
 # other misc files
-rm -f %{target_source}/{.config.old,.config.cmd,.tmp_gas_check,.mailmap,.missing-syscalls.d}
+rm -f %{target_source}/{.config.old,.config.cmd,.tmp_gas_check,.mailmap,.missing-syscalls.d,arch/.gitignore}
 
 # disable mrproper in -devel rpms
 %if %build_devel
