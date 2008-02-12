@@ -19,12 +19,12 @@
 
 %define kernelversion	2
 %define patchlevel	6
-%define sublevel	24
+%define sublevel	25
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) or stable release (kstable)
-%define kpatch		0
-%define kstable		2
+%define kpatch		rc1
+%define kstable		0
 
 # kernel.org -git patch
 %define kgit		0
@@ -769,7 +769,7 @@ chmod -R a+rX %{target_source}
 # we remove all the source files that we don't ship
 
 # first architecture files
-for i in alpha arm avr32 blackfin cris frv h8300 ia64 mips m32r m68k m68knommu parisc powerpc ppc sh sh64 s390 v850 xtensa; do
+for i in alpha arm avr32 blackfin cris frv h8300 ia64 mips m32r m68k m68knommu mn10300 parisc powerpc ppc sh sh64 s390 v850 xtensa; do
 	rm -rf %{target_source}/arch/$i
 	rm -rf %{target_source}/include/asm-$i
 
@@ -1043,6 +1043,7 @@ exit 0
 %{_kerneldir}/Makefile
 %{_kerneldir}/README
 %{_kerneldir}/REPORTING-BUGS
+%{_kerneldir}/arch/Kconfig
 %ifarch sparc sparc64
 %{_kerneldir}/arch/sparc
 %{_kerneldir}/arch/sparc64
@@ -1093,6 +1094,7 @@ exit 0
 %{_kerneldir}/security
 %{_kerneldir}/sound
 %{_kerneldir}/usr
+%{_kerneldir}/virt
 %doc README.kernel-sources
 %doc README.MandrivaLinux
 %endif
@@ -1110,6 +1112,7 @@ exit 0
 %{_up_develdir}/Kbuild
 %{_up_develdir}/Makefile
 %{_up_develdir}/Module.symvers
+%{_up_develdir}/arch/Kconfig
 %ifarch sparc sparc64
 %{_up_develdir}/arch/sparc
 %{_up_develdir}/arch/sparc64
@@ -1176,6 +1179,7 @@ exit 0
 %{_smp_develdir}/Kbuild
 %{_smp_develdir}/Makefile
 %{_smp_develdir}/Module.symvers
+%{_smp_develdir}/arch/Kconfig
 %ifarch sparc sparc64
 %{_smp_develdir}/arch/sparc
 %{_smp_develdir}/arch/sparc64
