@@ -124,7 +124,7 @@ Summary: 	The Linux kernel (the core of the Linux operating system)
 Name:           %{kname}
 Version:        %{kversion}
 Release:        %{rpmrel}
-License: 	GPL
+License: 	GPLv2
 Group: 		System/Kernel and hardware
 ExclusiveArch: 	%{ix86} x86_64 sparc64
 ExclusiveOS: 	Linux
