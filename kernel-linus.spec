@@ -23,7 +23,7 @@
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) or stable release (kstable)
-%define kpatch		rc9
+%define kpatch		0
 %define kstable		0
 
 # kernel.org -git patch
