@@ -40,8 +40,12 @@
 %if %kpatch
 %define rpmrel		%mkrel 0.%{kpatch}.%{mdvrelease}
 %else
+%if %kgit
+%define rpmrel		%mkrel 0.%{kgit}.%{mdvrelease}
+%else
 %define rpmrel		%mkrel %{mdvrelease}
-%endif
+%endif # %kgit
+%endif # %kpatch
 
 # theese two never change, they are used to fool rpm/urpmi/smart
 %define fakever		1
@@ -66,8 +70,12 @@
 %if %kpatch
 %define buildrpmrel     0.%{kpatch}.%{mdvrelease}%{rpmtag}
 %else
+%if %kgit
+%define buildrpmrel     0.%{kgit}.%{mdvrelease}%{rpmtag}
+%else
 %define buildrpmrel     %{mdvrelease}%{rpmtag}
-%endif
+%endif # %kgit
+%endif # %kpatch
 
 %define buildrel        %{kversion}-%{buildrpmrel}
 
