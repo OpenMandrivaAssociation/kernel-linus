@@ -27,7 +27,7 @@
 %define kstable		0
 
 # kernel.org -git patch
-%define kgit		0
+%define kgit		git17
 
 # this is the releaseversion
 %define mdvrelease 	1
@@ -172,9 +172,18 @@ Source10:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchl
 %endif
 # kernel.org -git
 %if %kgit
+%if %kpatch
 Patch2:         ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}-%{kgit}.bz2
 Source11:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}-%{kgit}.bz2.sign
+%else
+Patch2:         ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kgit}.bz2
+Source11:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kgit}.bz2.sign
 %endif
+%endif
+
+# LKML patches
+# http://lkml.org/lkml/2008/4/30/93
+Patch100:	fix_media.patch
 
 #END
 ####################################################################
@@ -522,6 +531,7 @@ pushd %src_dir
 %if %kgit
 %patch2 -p1
 %endif
+%patch100 -p1
 popd
 
 # PATCH END
@@ -644,9 +654,6 @@ SaveDevel() {
 		cp -fR arch/x86/kernel/asm-offsets_{32,64}.c $DevelRoot/arch/x86/kernel/
 	%else
 		cp -fR arch/%{target_arch}/kernel/asm-offsets.{c,s} $DevelRoot/arch/%{target_arch}/kernel/
-	%endif
-	%ifarch %{ix86}
-		cp -fR arch/x86/kernel/sigframe_32.h $DevelRoot/arch/x86/kernel/
 	%endif
 	cp -fR .config Module.symvers $DevelRoot
 	
