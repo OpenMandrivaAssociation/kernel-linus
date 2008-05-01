@@ -27,7 +27,7 @@
 %define kstable		0
 
 # kernel.org -git patch
-%define kgit		git17
+%define kgit		0
 
 # this is the releaseversion
 %define mdvrelease 	1
@@ -40,12 +40,8 @@
 %if %kpatch
 %define rpmrel		%mkrel 0.%{kpatch}.%{mdvrelease}
 %else
-%if %kgit
-%define rpmrel		%mkrel 0.%{kgit}.%{mdvrelease}
-%else
 %define rpmrel		%mkrel %{mdvrelease}
-%endif # %kgit
-%endif # %kpatch
+%endif
 
 # theese two never change, they are used to fool rpm/urpmi/smart
 %define fakever		1
@@ -70,12 +66,8 @@
 %if %kpatch
 %define buildrpmrel     0.%{kpatch}.%{mdvrelease}%{rpmtag}
 %else
-%if %kgit
-%define buildrpmrel     0.%{kgit}.%{mdvrelease}%{rpmtag}
-%else
 %define buildrpmrel     %{mdvrelease}%{rpmtag}
-%endif # %kgit
-%endif # %kpatch
+%endif
 
 %define buildrel        %{kversion}-%{buildrpmrel}
 
@@ -180,18 +172,9 @@ Source10:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchl
 %endif
 # kernel.org -git
 %if %kgit
-%if %kpatch
 Patch2:         ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}-%{kgit}.bz2
 Source11:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}-%{kgit}.bz2.sign
-%else
-Patch2:         ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kgit}.bz2
-Source11:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kgit}.bz2.sign
 %endif
-%endif
-
-# LKML patches
-# http://lkml.org/lkml/2008/4/30/93
-Patch100:	fix_media.patch
 
 #END
 ####################################################################
@@ -539,7 +522,6 @@ pushd %src_dir
 %if %kgit
 %patch2 -p1
 %endif
-%patch100 -p1
 popd
 
 # PATCH END
@@ -662,6 +644,9 @@ SaveDevel() {
 		cp -fR arch/x86/kernel/asm-offsets_{32,64}.c $DevelRoot/arch/x86/kernel/
 	%else
 		cp -fR arch/%{target_arch}/kernel/asm-offsets.{c,s} $DevelRoot/arch/%{target_arch}/kernel/
+	%endif
+	%ifarch %{ix86}
+		cp -fR arch/x86/kernel/sigframe_32.h $DevelRoot/arch/x86/kernel/
 	%endif
 	cp -fR .config Module.symvers $DevelRoot
 	
