@@ -27,7 +27,7 @@
 %define kstable		0
 
 # kernel.org -git patch
-%define kgit		0
+%define kgit		git7
 
 # this is the releaseversion
 %define mdvrelease 	1
@@ -38,7 +38,11 @@
 
 %define rpmtag		%distsuffix
 %if %kpatch
+%if %kgit
+%define rpmrel		%mkrel 0.%{kpatch}.%{kgit}.%{mdvrelease}
+%else
 %define rpmrel		%mkrel 0.%{kpatch}.%{mdvrelease}
+%endif
 %else
 %define rpmrel		%mkrel %{mdvrelease}
 %endif
@@ -64,7 +68,11 @@
 
 # used for not making too long names for rpms or search paths
 %if %kpatch
+%if %kgit
+%define buildrpmrel     0.%{kpatch}.%{kgit}.%{mdvrelease}%{rpmtag}
+%else
 %define buildrpmrel     0.%{kpatch}.%{mdvrelease}%{rpmtag}
+%endif
 %else
 %define buildrpmrel     %{mdvrelease}%{rpmtag}
 %endif
