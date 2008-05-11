@@ -654,8 +654,15 @@ SaveDevel() {
 		cp -fR arch/%{target_arch}/kernel/asm-offsets.{c,s} $DevelRoot/arch/%{target_arch}/kernel/
 	%endif
 	%ifarch %{ix86}
-		cp -fR arch/x86/kernel/sigframe_32.h $DevelRoot/arch/x86/kernel/
+		cp -fR arch/x86/kernel/sigframe.h $DevelRoot/arch/x86/kernel/
 	%endif
+	
+	# needed for generation of kernel/bounds.s
+	cp -fR kernel/bounds.c $DevelRoot/kernel/
+	
+	# needed for lguest
+	cp -fR drivers/lguest/lg.h $DevelRoot/drivers/lguest/
+	
 	cp -fR .config Module.symvers $DevelRoot
 	
         # Needed for truecrypt build (Danny)
