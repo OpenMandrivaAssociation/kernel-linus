@@ -356,7 +356,7 @@ If you want to build your own kernel, you need to install the full
 #
 # kernel-doc: documentation for the Linux kernel
 #
-
+%if %build_doc
 %package -n %{kname}-doc-%{buildrel}
 Version:	%{fakever}
 Release:	%{fakerel}
@@ -377,7 +377,7 @@ For instructions for update, see:
 http://www.mandriva.com/en/security/kernelupdate
 
 %{klinus_notice}
-
+%endif #build_doc
 
 
 #
