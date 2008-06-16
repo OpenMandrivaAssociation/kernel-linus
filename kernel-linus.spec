@@ -357,9 +357,9 @@ If you want to build your own kernel, you need to install the full
 # kernel-doc: documentation for the Linux kernel
 #
 %if %build_doc
-%package -n %{kname}-doc-%{buildrel}
-Version:	%{fakever}
-Release:	%{fakerel}
+%package -n %{kname}-doc
+Version:        %{kversion}
+Release:        %{rpmrel}
 Summary:	Various documentation bits found in the kernel source
 Group:		Books/Computer books
 %ifarch %{ix86}	
@@ -487,28 +487,6 @@ Conflicts:	arch(x86_64)
 %description -n %{kname}-smp-devel-latest
 This package is a virtual rpm that aims to make sure you always have the
 latest %{kname}-smp-devel installed...
-
-%{klinus_notice}
-
-
-
-#
-# kernel-doc-latest: virtual rpm
-#
-
-%package -n %{kname}-doc-latest
-Version:        %{kversion}
-Release:        %{rpmrel}
-Summary: 	Virtual rpm for latest %{kname}-doc
-Group: 	  	System/Kernel and hardware
-Requires: 	%{kname}-doc-%{buildrel}
-%ifarch %{ix86}	
-Conflicts:	arch(x86_64)
-%endif
-
-%description -n %{kname}-doc-latest
-This package is a virtual rpm that aims to make sure you always have the
-latest %{kname}-doc installed...
 
 %{klinus_notice}
 
