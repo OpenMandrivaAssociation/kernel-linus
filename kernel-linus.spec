@@ -660,6 +660,10 @@ SaveDevel() {
         # Needed for truecrypt build (Danny)
 	cp -fR drivers/md/dm.h $DevelRoot/drivers/md/
 
+	# Needed for external dvb tree (#41418)
+	cp -fR drivers/media/dvb/dvb-core/*.h $DevelRoot/drivers/media/dvb/dvb-core/
+	cp -fR drivers/media/dvb/frontends/lgdt330x.h $DevelRoot/drivers/media/dvb/frontends/
+
 	# Clean the scripts tree
 	pushd $DevelRoot >/dev/null
 		%smake -s clean
