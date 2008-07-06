@@ -863,7 +863,7 @@ find %{target_modules} -name "*.ko" | xargs gzip -9
 # Now, we make sure that the thing in the linux dir is what we want it to be
 
 for i in %{target_modules}/*; do
-  rm -f $i/build $i/source $i/modules.*
+  rm -f $i/build $i/source
 done
 
 
