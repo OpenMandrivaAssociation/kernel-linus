@@ -209,7 +209,7 @@ Source package to build the Linux kernel.
 #
 # kernel: UP kernel
 #
-
+%if %build_up
 %package -n %{kname}-%{buildrel}
 Version:	%{fakever}
 Release:	%{fakerel}
@@ -234,13 +234,14 @@ For instructions for update, see:
 http://www.mandriva.com/en/security/kernelupdate
 
 %{klinus_notice}
+%endif #build_up
 
 
 
 #
 # kernel-smp: Symmetric MultiProcessing kernel
 #
-
+%if %build_smp
 %package -n %{kname}-smp-%{buildrel}
 Version:	%{fakever}
 Release:	%{fakerel}
@@ -264,13 +265,14 @@ For instructions for update, see:
 http://www.mandriva.com/en/security/kernelupdate
 
 %{klinus_notice}
+%endif #build_smp
 
 
 
 #
 # kernel-source: kernel sources
 #
-
+%if %build_source
 %package -n %{kname}-source-%{buildrel}
 Version:	%{fakever}
 Release:	%{fakerel}
@@ -296,13 +298,15 @@ For instructions for update, see:
 http://www.mandriva.com/en/security/kernelupdate
 
 %{klinus_notice}
+%endif #build_source
 
 
 
+%if %build_devel
 # 
 # kernel-devel-up: stripped kernel sources 
 #
-
+%if %build_up
 %package -n %{kname}-devel-%{buildrel}
 Version:	%{fakever}
 Release:	%{fakerel}
@@ -323,13 +327,14 @@ If you want to build your own kernel, you need to install the full
 %{kname}-source-%{buildrel} rpm.
 
 %{klinus_notice}
+%endif #build_up
 
 
 
 # 
 # kernel-devel-smp: stripped kernel sources 
 #
-
+%if %build_smp
 %package -n %{kname}-smp-devel-%{buildrel}
 Version:	%{fakever}
 Release:	%{fakerel}
@@ -350,6 +355,8 @@ If you want to build your own kernel, you need to install the full
 %{kname}-source-%{buildrel} rpm.
 
 %{klinus_notice}
+%endif #build_smp
+%endif #build_devel
 
 
 
@@ -366,7 +373,7 @@ Group:		Books/Computer books
 Conflicts:	arch(x86_64)
 %endif
 
-%description -n %{kname}-doc-%{buildrel}
+%description -n %{kname}-doc
 This package contains documentation files form the kernel source. Various
 bits of information about the Linux kernel and the device drivers shipped
 with it are documented in these files. You also might want install this
@@ -380,10 +387,11 @@ http://www.mandriva.com/en/security/kernelupdate
 %endif #build_doc
 
 
+
 #
 # kernel-latest: virtual rpm
 #
-
+%if %build_up
 %package -n %{kname}-latest
 Version:        %{kversion}
 Release:        %{rpmrel}
@@ -399,13 +407,14 @@ This package is a virtual rpm that aims to make sure you always have the
 latest %{kname} installed...
 
 %{klinus_notice}
+%endif #build_up
 
 
 
 #
 # kernel-smp-latest: virtual rpm
 #
-
+%if %build_smp
 %package -n %{kname}-smp-latest
 Version:        %{kversion}
 Release:        %{rpmrel}
@@ -421,13 +430,14 @@ This package is a virtual rpm that aims to make sure you always have the
 latest %{kname}-smp installed...
 
 %{klinus_notice}
+%endif #build_smp
 
 
 
 #
 # kernel-source-latest: virtual rpm
 #
-
+%if %build_source
 %package -n %{kname}-source-latest
 Version:        %{kversion}
 Release:        %{rpmrel}
@@ -443,13 +453,14 @@ This package is a virtual rpm that aims to make sure you always have the
 latest %{kname}-source installed...
 
 %{klinus_notice}
+%endif #build_source
 
 
-
+%if %build_devel
 #
 # kernel-devel-latest: virtual rpm
 #
-
+%if %build_up
 %package -n %{kname}-devel-latest
 Version:        %{kversion}
 Release:        %{rpmrel}
@@ -466,13 +477,14 @@ This package is a virtual rpm that aims to make sure you always have the
 latest %{kname}-devel installed...
 
 %{klinus_notice}
+%endif #build_up
 
 
 
 #
 # kernel-smp-devel-latest: virtual rpm
 #
-
+%if %build_smp
 %package -n %{kname}-smp-devel-latest
 Version:        %{kversion}
 Release:        %{rpmrel}
@@ -489,6 +501,8 @@ This package is a virtual rpm that aims to make sure you always have the
 latest %{kname}-smp-devel installed...
 
 %{klinus_notice}
+%endif #build_smp
+%endif #build_devel
 
 
 
@@ -1223,7 +1237,7 @@ exit 0
 %endif
 
 %if %build_doc
-%files -n %{kname}-doc-%{buildrel}
+%files -n %{kname}-doc
 %defattr(-,root,root)
 %doc linux-%{tar_ver}/Documentation/*
 %endif
@@ -1244,14 +1258,13 @@ exit 0
 %endif
 
 %if %build_devel
+%if %build_up
 %files -n %{kname}-devel-latest
 %defattr(-,root,root)
+%endif #build_up
 
+%if %build_smp
 %files -n %{kname}-smp-devel-latest
 %defattr(-,root,root)
-%endif
-
-%if %build_doc
-%files -n %{kname}-doc-latest
-%defattr(-,root,root)
-%endif
+%endif #build_smp
+%endif #build_devel
