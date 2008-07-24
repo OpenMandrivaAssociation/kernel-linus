@@ -589,9 +589,6 @@ PrepareKernel() {
 		LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -$extension/" Makefile
 	%endif
 
-	### FIXME MDV bugs #29744, #29074, will be removed when fixed upstream
-	LC_ALL=C perl -p -i -e "s/^source/### source/" drivers/crypto/Kconfig
-
 	%smake -s mrproper
 	%ifarch %{ix86} x86_64
 		cp arch/x86/configs/%{target_arch}_$config_name .config
