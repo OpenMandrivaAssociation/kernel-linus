@@ -1056,6 +1056,7 @@ exit 0
 %{_kerneldir}/block
 %{_kerneldir}/crypto
 %{_kerneldir}/drivers
+%{_kerneldir}/firmware
 %{_kerneldir}/fs
 %{_kerneldir}/include/Kbuild
 %{_kerneldir}/include/acpi
@@ -1125,6 +1126,7 @@ exit 0
 %{_up_develdir}/block
 %{_up_develdir}/crypto
 %{_up_develdir}/drivers
+%{_up_develdir}/firmware
 %{_up_develdir}/fs
 %{_up_develdir}/include/Kbuild
 %{_up_develdir}/include/acpi
@@ -1192,6 +1194,7 @@ exit 0
 %{_smp_develdir}/block
 %{_smp_develdir}/crypto
 %{_smp_develdir}/drivers
+%{_smp_develdir}/firmware
 %{_smp_develdir}/fs
 %{_smp_develdir}/include/Kbuild
 %{_smp_develdir}/include/acpi
