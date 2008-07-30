@@ -553,9 +553,10 @@ LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" linux-%{tar_ver}/
 
 %build
 # Common target directories
-%define _kerneldir /usr/src/%{kname}-%{buildrel}
 %define _bootdir /boot
+%define _firmwaredir /lib/firmware
 %define _modulesdir /lib/modules
+%define _kerneldir /usr/src/%{kname}-%{buildrel}
 %define _up_develdir /usr/src/%{kname}-devel-%{buildrel}
 %define _smp_develdir /usr/src/%{kname}-devel-%{buildrel}smp
 
@@ -563,9 +564,10 @@ LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" linux-%{tar_ver}/
 
 # Directories definition needed for building
 %define temp_root %{build_dir}/temp-root
-%define temp_source %{temp_root}%{_kerneldir}
 %define temp_boot %{temp_root}%{_bootdir}
+%define temp_firmware %{temp_root}%{_firmwaredir}
 %define temp_modules %{temp_root}%{_modulesdir}
+%define temp_source %{temp_root}%{_kerneldir}
 %define temp_up_devel %{temp_root}%{_up_develdir}
 %define temp_smp_devel %{temp_root}%{_smp_develdir}
 
@@ -680,6 +682,7 @@ CreateFiles() {
 	echo "%{_bootdir}/config-${kernversion}" >> $output
 	echo "%{_bootdir}/vmlinuz-${kernversion}" >> $output
 	echo "%{_bootdir}/System.map-${kernversion}" >> $output
+	echo "%{_firmwaredir}/*" >> $output
 	echo "%dir %{_modulesdir}/${kernversion}/" >> $output
 	echo "%{_modulesdir}/${kernversion}/kernel" >> $output
 	echo "%{_modulesdir}/${kernversion}/modules.*" >> $output
