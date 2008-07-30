@@ -1072,6 +1072,7 @@ exit 0
 %{_kerneldir}/include/asm-um
 %{_kerneldir}/include/config
 %{_kerneldir}/include/crypto
+%{_kerneldir}/include/drm
 %{_kerneldir}/include/linux
 %{_kerneldir}/include/math-emu
 %{_kerneldir}/include/net
@@ -1142,6 +1143,7 @@ exit 0
 %{_up_develdir}/include/asm-um
 %{_up_develdir}/include/config
 %{_up_develdir}/include/crypto
+%{_up_develdir}/include/drm
 %{_up_develdir}/include/keys
 %{_up_develdir}/include/linux
 %{_up_develdir}/include/math-emu
@@ -1210,6 +1212,7 @@ exit 0
 %{_smp_develdir}/include/asm-um
 %{_smp_develdir}/include/config
 %{_smp_develdir}/include/crypto
+%{_smp_develdir}/include/drm
 %{_smp_develdir}/include/keys
 %{_smp_develdir}/include/linux
 %{_smp_develdir}/include/math-emu
