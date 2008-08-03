@@ -30,7 +30,7 @@
 %define kgit		2
 
 # this is the releaseversion
-%define mdvrelease 	1
+%define mdvrelease 	2
 
 # This is only to make life easier for people that creates derivated kernels
 # a.k.a name it kernel-tmb :)
@@ -95,6 +95,7 @@
 %define build_doc 0
 %define build_source 1
 %define build_devel 1
+%define build_firmware 1
 
 %define build_up 1
 %define build_smp 1
@@ -107,13 +108,14 @@
 %{?_without_doc: %global build_doc 0}
 %{?_without_source: %global build_source 0}
 %{?_without_devel: %global build_devel 0}
+%{?_without_firmware: %global build_firmware 0}
 
 %{?_with_up: %global build_up 1}
 %{?_with_smp: %global build_smp 1}
 %{?_with_doc: %global build_doc 1}
 %{?_with_source: %global build_source 1}
 %{?_with_devel: %global build_devel 1}
-
+%{?_with_firmware: %global build_firmware 1}
 
 %if %(if [ -z "$CC" ] ; then echo 0; else echo 1; fi)
 %define kmake %make CC="$CC"
@@ -192,6 +194,7 @@ Source11:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchl
 %define requires2 mkinitrd >= 3.4.43-%mkrel 10
 %define requires3 bootloader-utils >= 1.9
 %define requires4 sysfsutils module-init-tools >= 0.9.15
+%define requires5 %{kname}-firmware-%{buildrel}
 
 %define kprovides kernel = %{tar_ver}, alsa
 
@@ -220,6 +223,7 @@ Requires: 	%requires1
 Requires: 	%requires2
 Requires: 	%requires3
 Requires: 	%requires4
+Requires: 	%requires5
 %ifarch %{ix86}	
 Conflicts:	arch(x86_64)
 %endif
@@ -252,6 +256,8 @@ Requires:	%requires1
 Requires:	%requires2
 Requires:	%requires3
 Requires:	%requires4
+Requires: 	%requires5
+
 %ifarch %{ix86}	
 Conflicts:	arch(x86_64)
 %endif
@@ -357,6 +363,28 @@ If you want to build your own kernel, you need to install the full
 %{klinus_notice}
 %endif #build_smp
 %endif #build_devel
+
+
+
+# 
+# kernel-firmware: same firmware for up and smp kernels
+#
+%if %build_firmware
+%package -n %{kname}-firmware-%{buildrel}
+Version:	%{fakever}
+Release:	%{fakerel}
+Provides:	kernel-firmware = %{kverrel}
+Summary:	The firmware files for %{kname}
+Group:		Development/Kernel
+Autoreqprov:	no
+
+%description -n %{kname}-firmware-%{buildrel}
+This package contains the firmware files needed by some of the in-kernel
+drivers. The reason for keeping them in a separate rpm is that they are
+the same for all kernel flavours.
+
+%{klinus_notice}
+%endif #build_firmware
 
 
 
@@ -565,7 +593,6 @@ LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" linux-%{tar_ver}/
 # Directories definition needed for building
 %define temp_root %{build_dir}/temp-root
 %define temp_boot %{temp_root}%{_bootdir}
-%define temp_firmware %{temp_root}%{_firmwaredir}
 %define temp_modules %{temp_root}%{_modulesdir}
 %define temp_source %{temp_root}%{_kerneldir}
 %define temp_up_devel %{temp_root}%{_up_develdir}
@@ -682,7 +709,6 @@ CreateFiles() {
 	echo "%{_bootdir}/config-${kernversion}" >> $output
 	echo "%{_bootdir}/vmlinuz-${kernversion}" >> $output
 	echo "%{_bootdir}/System.map-${kernversion}" >> $output
-	echo "%{_firmwaredir}/*" >> $output
 	echo "%dir %{_modulesdir}/${kernversion}/" >> $output
 	echo "%{_modulesdir}/${kernversion}/kernel" >> $output
 	echo "%{_modulesdir}/${kernversion}/modules.*" >> $output
@@ -1244,6 +1270,12 @@ exit 0
 %doc README.MandrivaLinux
 #endif %build_devel
 %endif
+%endif
+
+%if %build_firmware
+%files -n %{kname}-firmware-%{buildrel}
+%defattr(-,root,root)
+%{_firmwaredir}/*
 %endif
 
 %if %build_doc
