@@ -95,7 +95,6 @@
 %define build_doc 0
 %define build_source 1
 %define build_devel 1
-%define build_firmware 1
 
 %define build_up 1
 %define build_smp 1
@@ -108,14 +107,12 @@
 %{?_without_doc: %global build_doc 0}
 %{?_without_source: %global build_source 0}
 %{?_without_devel: %global build_devel 0}
-%{?_without_firmware: %global build_firmware 0}
 
 %{?_with_up: %global build_up 1}
 %{?_with_smp: %global build_smp 1}
 %{?_with_doc: %global build_doc 1}
 %{?_with_source: %global build_source 1}
 %{?_with_devel: %global build_devel 1}
-%{?_with_firmware: %global build_firmware 1}
 
 %if %(if [ -z "$CC" ] ; then echo 0; else echo 1; fi)
 %define kmake %make CC="$CC"
@@ -368,28 +365,6 @@ If you want to build your own kernel, you need to install the full
 
 
 
-# 
-# kernel-firmware: same firmware for up and smp kernels
-#
-%if %build_firmware
-%package -n %{kname}-firmware-%{buildrel}
-Version:	%{fakever}
-Release:	%{fakerel}
-Provides:	kernel-firmware = %{kverrel}
-Summary:	The firmware files for %{kname}
-Group:		Development/Kernel
-Autoreqprov:	no
-
-%description -n %{kname}-firmware-%{buildrel}
-This package contains the firmware files needed by some of the in-kernel
-drivers. The reason for keeping them in a separate rpm is that they are
-the same for all kernel flavours.
-
-%{klinus_notice}
-%endif #build_firmware
-
-
-
 #
 # kernel-doc: documentation for the Linux kernel
 #
@@ -584,7 +559,6 @@ LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" linux-%{tar_ver}/
 %build
 # Common target directories
 %define _bootdir /boot
-%define _firmwaredir /lib/firmware
 %define _modulesdir /lib/modules
 %define _kerneldir /usr/src/%{kname}-%{buildrel}
 %define _up_develdir /usr/src/%{kname}-devel-%{buildrel}
@@ -1272,12 +1246,6 @@ exit 0
 %doc README.MandrivaLinux
 #endif %build_devel
 %endif
-%endif
-
-%if %build_firmware
-%files -n %{kname}-firmware-%{buildrel}
-%defattr(-,root,root)
-%{_firmwaredir}/*
 %endif
 
 %if %build_doc
