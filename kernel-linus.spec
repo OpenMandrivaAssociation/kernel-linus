@@ -30,7 +30,7 @@
 %define kgit		0
 
 # this is the releaseversion
-%define mdvrelease 	1
+%define mdvrelease 	2
 
 # This is only to make life easier for people that creates derivated kernels
 # a.k.a name it kernel-tmb :)
@@ -219,6 +219,7 @@ Release:	%{fakerel}
 Summary: 	The Linux kernel (the core of the Linux operating system)
 Group: 	  	System/Kernel and hardware
 Provides: 	module-info, %kprovides
+Provides:	should-restart = system
 Requires: 	%requires1
 Requires: 	%requires2
 Requires: 	%requires3
@@ -252,6 +253,7 @@ Release:	%{fakerel}
 Summary:	The Linux Kernel compiled for SMP machines
 Group:		System/Kernel and hardware
 Provides:	%kprovides
+Provides:	should-restart = system
 Requires:	%requires1
 Requires:	%requires2
 Requires:	%requires3
