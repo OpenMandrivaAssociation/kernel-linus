@@ -1064,7 +1064,6 @@ exit 0
 %{_kerneldir}/fs
 %{_kerneldir}/include/Kbuild
 %{_kerneldir}/include/acpi
-%{_kerneldir}/include/asm
 %{_kerneldir}/include/asm-generic
 %ifarch sparc sparc64
 %{_kerneldir}/include/asm-sparc
