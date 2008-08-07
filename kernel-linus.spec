@@ -748,9 +748,7 @@ CreateKernel up
 PrepareKernel "" %{buildrpmrel}custom
 # From > 2.6.13 prepare-all is deprecated and relies on include/linux/autoconf
 # To have modpost and others scripts, one has to use the target scripts
-%smake -s prepare
-%smake -s scripts
-%smake -s clean
+%smake -s mrproper
 %endif
 
 
@@ -1045,7 +1043,6 @@ exit 0
 %dir %{_kerneldir}
 %dir %{_kerneldir}/arch
 %dir %{_kerneldir}/include
-%{_kerneldir}/.config
 %{_kerneldir}/.gitignore
 %{_kerneldir}/COPYING
 %{_kerneldir}/CREDITS
@@ -1081,7 +1078,6 @@ exit 0
 %{_kerneldir}/include/asm-x86
 %endif
 %{_kerneldir}/include/asm-um
-%{_kerneldir}/include/config
 %{_kerneldir}/include/crypto
 %{_kerneldir}/include/drm
 %{_kerneldir}/include/linux
