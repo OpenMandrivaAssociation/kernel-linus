@@ -670,10 +670,17 @@ SaveDevel() {
 	cp -fR drivers/media/dvb/dvb-core/*.h $DevelRoot/drivers/media/dvb/dvb-core/
 	cp -fR drivers/media/dvb/frontends/lgdt330x.h $DevelRoot/drivers/media/dvb/frontends/
 
-	# Clean the scripts tree
+
+	# disable bounds.h and asm-offsets.h removal
+	patch -p1 -d $DevelRoot% -i %{SOURCE3}
+
+	# check and clean the -devel tree
 	pushd $DevelRoot >/dev/null
-		%smake -s clean
+		%smake -s prepare scripts clean
 	popd >/dev/null
+
+	# disable mrproper and other targets
+	patch -p1 -d %{target_up_devel} -i %{SOURCE2}
 
 	# fix permissions
 	chmod -R a+rX $DevelRoot
@@ -846,18 +853,6 @@ done
 
 # other misc files
 rm -f %{target_source}/{.config.old,.config.cmd,.tmp_gas_check,.mailmap,.missing-syscalls.d,arch/.gitignore}
-
-# disable mrproper in -devel rpms
-%if %build_devel
-%if %build_up
-patch -p1 -d %{target_up_devel} -i %{SOURCE2}
-patch -p1 -d %{target_up_devel} -i %{SOURCE3}
-%endif
-%if %build_smp
-patch -p1 -d %{target_smp_devel} -i %{SOURCE2}
-patch -p1 -d %{target_smp_devel} -i %{SOURCE3}
-%endif
-%endif
 
 #endif %build_source
 %endif
