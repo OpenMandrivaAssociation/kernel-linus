@@ -625,6 +625,9 @@ BuildKernel() {
 	# modules
 	install -d %{temp_modules}/$KernelVer
 	%smake INSTALL_MOD_PATH=%{temp_root} KERNELRELEASE=$KernelVer modules_install 
+	
+	# remove /lib/firmware, we use a separate kernel-firmware
+	rm -rf %{temp_root}/lib
 }
 
 
