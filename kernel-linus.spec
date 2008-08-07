@@ -191,7 +191,7 @@ Source11:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchl
 %define requires2 mkinitrd >= 3.4.43-%mkrel 10
 %define requires3 bootloader-utils >= 1.9
 %define requires4 sysfsutils module-init-tools >= 0.9.15
-%define requires5 %{kname}-firmware-%{buildrel}
+%define requires5 kernel-firmware >= 2.6.27-0.rc2.2mdv
 
 %define kprovides kernel = %{tar_ver}, alsa
 
