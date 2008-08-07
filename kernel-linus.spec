@@ -147,6 +147,7 @@ Source1:        ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchl
 
 # This is for disabling mrproper on -devel rpms
 Source2:	disable-mrproper-in-devel-rpms.patch
+Source3:	kbuild-really-dont-remove-bounds-asm-offsets-headers.patch
 
 Source4:  	README.kernel-sources
 Source5:  	README.MandrivaLinux
@@ -852,9 +853,11 @@ rm -f %{target_source}/{.config.old,.config.cmd,.tmp_gas_check,.mailmap,.missing
 %if %build_devel
 %if %build_up
 patch -p1 -d %{target_up_devel} -i %{SOURCE2}
+patch -p1 -d %{target_up_devel} -i %{SOURCE3}
 %endif
 %if %build_smp
 patch -p1 -d %{target_smp_devel} -i %{SOURCE2}
+patch -p1 -d %{target_smp_devel} -i %{SOURCE3}
 %endif
 %endif
 
