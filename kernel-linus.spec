@@ -145,8 +145,9 @@ URL: 		http://wiki.mandriva.com/en/Docs/Howto/Mandriva_Kernels#kernel-linus
 Source0:        ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/linux-%{tar_ver}.tar.bz2
 Source1:        ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/linux-%{tar_ver}.tar.bz2.sign
 
-# This is for disabling mrproper on -devel rpms
+# This is for disabling mrproper and other targets on -devel rpms
 Source2:	disable-mrproper-in-devel-rpms.patch
+# This disables removal of bounds.h and asm-offsets.h in -devel rpms
 Source3:	kbuild-really-dont-remove-bounds-asm-offsets-headers.patch
 
 Source4:  	README.kernel-sources
@@ -672,7 +673,7 @@ SaveDevel() {
 
 
 	# disable bounds.h and asm-offsets.h removal
-	patch -p1 -d $DevelRoot% -i %{SOURCE3}
+	patch -p1 -d $DevelRoot -i %{SOURCE3}
 
 	# check and clean the -devel tree
 	pushd $DevelRoot >/dev/null
@@ -680,7 +681,7 @@ SaveDevel() {
 	popd >/dev/null
 
 	# disable mrproper and other targets
-	patch -p1 -d %{target_up_devel} -i %{SOURCE2}
+	patch -p1 -d $DevelRoot -i %{SOURCE2}
 
 	# fix permissions
 	chmod -R a+rX $DevelRoot
