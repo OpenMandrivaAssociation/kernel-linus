@@ -2,27 +2,14 @@
 #
 # (c) Mandriva
 #
-# The kernel-2.6-linus package (and so this spec file) is under development,
-# it does mean:
-#
-#    1. You can have nasty surprises when playing with the package
-#    generation
-#
-#    2. Is easier to go and come back from Mordor than adding a new
-#    architecture support
-#
-#    3. A known architecture with just a missing .config shouldn't be too
-#    hard, but as this spec changes too fast, it's likely to be broken
-# 
-#
-# if you try to understand kernel numbering, read docs/kernel_naming
 
 %define kernelversion	2
 %define patchlevel	6
 %define sublevel	27
 
 # kernel Makefile extraversion is substituted by 
-# kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) or stable release (kstable)
+# kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
+# or stable release (kstable)
 %define kpatch		rc2
 %define kstable		0
 
@@ -678,6 +665,7 @@ SaveDevel() {
 	# check and clean the -devel tree
 	pushd $DevelRoot >/dev/null
 		%smake -s prepare scripts clean
+		rm -f .config.old
 	popd >/dev/null
 
 	# disable mrproper and other targets
@@ -754,8 +742,7 @@ CreateKernel up
 # We don't make to repeat the depend code at the install phase
 %if %build_source
 PrepareKernel "" %{buildrpmrel}custom
-# From > 2.6.13 prepare-all is deprecated and relies on include/linux/autoconf
-# To have modpost and others scripts, one has to use the target scripts
+# kernel-source is shipped as an upnprepared tree
 %smake -s mrproper
 %endif
 
@@ -792,7 +779,8 @@ chmod -R a+rX %{target_source}
 # we remove all the source files that we don't ship
 
 # first architecture files
-for i in alpha arm avr32 blackfin cris frv h8300 ia64 mips m32r m68k m68knommu mn10300 parisc powerpc ppc sh sh64 s390 v850 xtensa; do
+for i in alpha arm avr32 blackfin cris frv h8300 ia64 mips m32r m68k \
+	 m68knommu mn10300 parisc powerpc ppc sh sh64 s390 v850 xtensa; do
 	rm -rf %{target_source}/arch/$i
 	rm -rf %{target_source}/include/asm-$i
 
@@ -804,13 +792,6 @@ for i in alpha arm avr32 blackfin cris frv h8300 ia64 mips m32r m68k m68knommu m
 %if %build_smp
 	rm -rf %{target_smp_devel}/arch/$i
 	rm -rf %{target_smp_devel}/include/asm-$i
-%endif
-# Needed for truecrypt build (Danny)
-%if %build_up
-	cp -fR drivers/md/dm.h %{target_up_devel}/drivers/md/
-%endif
-%if %build_smp
-	cp -fR drivers/md/dm.h %{target_smp_devel}/drivers/md/
 %endif
 %endif	
 done
