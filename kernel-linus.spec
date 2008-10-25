@@ -1055,7 +1055,6 @@ exit 0
 %ifarch %{ix86} x86_64
 %{_kerneldir}/include/asm-x86
 %endif
-%{_kerneldir}/include/asm-um
 %{_kerneldir}/include/crypto
 %{_kerneldir}/include/drm
 %{_kerneldir}/include/linux
@@ -1125,7 +1124,6 @@ exit 0
 %ifarch %{ix86} x86_64
 %{_up_develdir}/include/asm-x86
 %endif
-%{_up_develdir}/include/asm-um
 %{_up_develdir}/include/config
 %{_up_develdir}/include/crypto
 %{_up_develdir}/include/drm
@@ -1194,7 +1192,6 @@ exit 0
 %ifarch %{ix86} x86_64
 %{_smp_develdir}/include/asm-x86
 %endif
-%{_smp_develdir}/include/asm-um
 %{_smp_develdir}/include/config
 %{_smp_develdir}/include/crypto
 %{_smp_develdir}/include/drm
