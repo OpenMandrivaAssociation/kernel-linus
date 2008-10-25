@@ -5,16 +5,16 @@
 
 %define kernelversion	2
 %define patchlevel	6
-%define sublevel	27
+%define sublevel	28
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		0
-%define kstable		3
+%define kpatch		rc1
+%define kstable		0
 
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		0
+%define kgit		1
 
 # this is the releaseversion
 %define mdvrelease 	1
@@ -636,8 +636,10 @@ SaveDevel() {
 	%ifarch %{ix86} x86_64
 		cp -fR arch/x86/kernel/asm-offsets.{c,s} $DevelRoot/arch/x86/kernel/
 		cp -fR arch/x86/kernel/asm-offsets_{32,64}.c $DevelRoot/arch/x86/kernel/
+		cp -fR arch/x86/include $DevelRoot/arch/x86/
 	%else
 		cp -fR arch/%{target_arch}/kernel/asm-offsets.{c,s} $DevelRoot/arch/%{target_arch}/kernel/
+		cp -fR arch/%{target_arch}/include $DevelRoot/arch/%{target_arch}/
 	%endif
 	%ifarch %{ix86}
 		cp -fR arch/x86/kernel/sigframe.h $DevelRoot/arch/x86/kernel/
