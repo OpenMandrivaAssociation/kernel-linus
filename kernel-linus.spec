@@ -197,7 +197,11 @@ Source package to build the Linux kernel.
 %package -n %{kname}-%{buildrel}
 Version:	%{fakever}
 Release:	%{fakerel}
-Summary:	The Linux Kernel compiled for SMP machines
+%ifarch %{ix86}
+Summary:	Linux Kernel for desktop use with i586 & 4GB RAM
+%else
+Summary:	Linux Kernel for desktop use with %{_arch}
+%endif
 Group:		System/Kernel and hardware
 Provides:	%kprovides
 Provides:	should-restart = system
@@ -212,9 +216,21 @@ Conflicts:	arch(x86_64)
 %endif
 
 %description -n %{kname}-%{buildrel}
-This package includes a SMP version of the Linux %{kversion} kernel. It is
-required only on machines with two or more CPUs, although it should work
-fine on single-CPU boxes.
+%ifarch %{ix86}
+This kernel is compiled for desktop use, single or multiple i586 
+processor(s)/core(s) and less than 4GB RAM, using HZ_1000, voluntary
+preempt, CFS cpu scheduler and cfq i/o scheduler.
+This kernel relies on in-kernel smp alternatives to switch between 
+up & smp mode depending on detected hardware. To force the kernel
+to boot in single processor mode, use the "nosmp" boot parameter.
+%else
+This kernel is compiled for desktop use, single or multiple %{_arch}
+processor(s)/core(s), using HZ_1000, voluntary preempt, CFS cpu 
+scheduler and cfq i/o scheduler.
+This kernel relies on in-kernel smp alternatives to switch between 
+up & smp mode depending on detected hardware. To force the kernel
+to boot in single processor mode, use the "nosmp" boot parameter.
+%endif
 
 For instructions for update, see:
 http://www.mandriva.com/en/security/kernelupdate
