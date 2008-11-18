@@ -190,10 +190,10 @@ Source package to build the Linux kernel.
 
 
 #
-# kernel-smp: Symmetric MultiProcessing kernel
+# kernel: Symmetric MultiProcessing kernel
 #
 %if %build_smp
-%package -n %{kname}-smp-%{buildrel}
+%package -n %{kname}-%{buildrel}
 Version:	%{fakever}
 Release:	%{fakerel}
 Summary:	The Linux Kernel compiled for SMP machines
@@ -210,7 +210,7 @@ Requires: 	%requires5
 Conflicts:	arch(x86_64)
 %endif
 
-%description -n %{kname}-smp-%{buildrel}
+%description -n %{kname}-%{buildrel}
 This package includes a SMP version of the Linux %{kversion} kernel. It is
 required only on machines with two or more CPUs, although it should work
 fine on single-CPU boxes.
@@ -258,14 +258,14 @@ http://www.mandriva.com/en/security/kernelupdate
 
 %if %build_devel
 # 
-# kernel-devel-smp: stripped kernel sources 
+# kernel-devel: stripped kernel sources 
 #
 %if %build_smp
-%package -n %{kname}-smp-devel-%{buildrel}
+%package -n %{kname}-devel-%{buildrel}
 Version:	%{fakever}
 Release:	%{fakerel}
 Provides:	kernel-devel = %{kverrel}
-Summary:	The %{kname}-smp devel files for 3rdparty modules build
+Summary:	The %{kname} devel files for 3rdparty modules build
 Group:		Development/Kernel
 Autoreqprov:	no
 Requires:	glibc-devel, ncurses-devel, make, gcc, perl
@@ -273,9 +273,9 @@ Requires:	glibc-devel, ncurses-devel, make, gcc, perl
 Conflicts:	arch(x86_64)
 %endif
 
-%description -n %{kname}-smp-devel-%{buildrel}
+%description -n %{kname}-devel-%{buildrel}
 This package contains the kernel-devel files that should be enough to build 
-3rdparty drivers against for use with the %{kname}-smp-%{buildrel}.
+3rdparty drivers against for use with the %{kname}-%{buildrel}.
 
 If you want to build your own kernel, you need to install the full 
 %{kname}-source-%{buildrel} rpm.
@@ -315,22 +315,22 @@ http://www.mandriva.com/en/security/kernelupdate
 
 
 #
-# kernel-smp-latest: virtual rpm
+# kernel-latest: virtual rpm
 #
 %if %build_smp
-%package -n %{kname}-smp-latest
+%package -n %{kname}-latest
 Version:        %{kversion}
 Release:        %{rpmrel}
-Summary: 	Virtual rpm for latest %{kname}-smp
+Summary: 	Virtual rpm for latest %{kname}
 Group: 	  	System/Kernel and hardware
-Requires: 	%{kname}-smp-%{buildrel}
+Requires: 	%{kname}-%{buildrel}
 %ifarch %{ix86}	
 Conflicts:	arch(x86_64)
 %endif
 
-%description -n %{kname}-smp-latest
+%description -n %{kname}-latest
 This package is a virtual rpm that aims to make sure you always have the
-latest %{kname}-smp installed...
+latest %{kname} installed...
 
 %{klinus_notice}
 %endif #build_smp
@@ -361,23 +361,23 @@ latest %{kname}-source installed...
 
 %if %build_devel
 #
-# kernel-smp-devel-latest: virtual rpm
+# kernel-devel-latest: virtual rpm
 #
 %if %build_smp
-%package -n %{kname}-smp-devel-latest
+%package -n %{kname}-devel-latest
 Version:        %{kversion}
 Release:        %{rpmrel}
-Summary: 	Virtual rpm for latest %{kname}-smp-devel
+Summary: 	Virtual rpm for latest %{kname}-devel
 Group: 	  	System/Kernel and hardware
-Requires: 	%{kname}-smp-devel-%{buildrel}
+Requires: 	%{kname}-devel-%{buildrel}
 Obsoletes:	%{kname}-smp-headers-latest
 %ifarch %{ix86}	
 Conflicts:	arch(x86_64)
 %endif
 
-%description -n %{kname}-smp-devel-latest
+%description -n %{kname}-devel-latest
 This package is a virtual rpm that aims to make sure you always have the
-latest %{kname}-smp-devel installed...
+latest %{kname}-devel installed...
 
 %{klinus_notice}
 %endif #build_smp
@@ -760,43 +760,43 @@ rm -rf %{buildroot}
 ###
 
 ### SMP kernel
-%preun -n %{kname}-smp-%{buildrel}
-/sbin/installkernel -R %{buildrel}smp
-if [ -L /lib/modules/%{buildrel}smp/build ]; then
-    rm -f /lib/modules/%{buildrel}smp/build
+%preun -n %{kname}-%{buildrel}
+/sbin/installkernel -R %{buildrel}
+if [ -L /lib/modules/%{buildrel}/build ]; then
+    rm -f /lib/modules/%{buildrel}/build
 fi
-if [ -L /lib/modules/%{buildrel}smp/source ]; then
-    rm -f /lib/modules/%{buildrel}smp/source
+if [ -L /lib/modules/%{buildrel}/source ]; then
+    rm -f /lib/modules/%{buildrel}/source
 fi
 exit 0
 
-%post -n %{kname}-smp-%{buildrel}
-/sbin/installkernel -L %{buildrel}smp
-if [ -d /usr/src/%{kname}-devel-%{buildrel}smp ]; then
-    ln -sf /usr/src/%{kname}-devel-%{buildrel}smp /lib/modules/%{buildrel}smp/build
-    ln -sf /usr/src/%{kname}-devel-%{buildrel}smp /lib/modules/%{buildrel}smp/source
+%post -n %{kname}-%{buildrel}
+/sbin/installkernel -L %{buildrel}
+if [ -d /usr/src/%{kname}-devel-%{buildrel} ]; then
+    ln -sf /usr/src/%{kname}-devel-%{buildrel} /lib/modules/%{buildrel}/build
+    ln -sf /usr/src/%{kname}-devel-%{buildrel} /lib/modules/%{buildrel}/source
 fi
 
-%postun -n %{kname}-smp-%{buildrel}
-/sbin/kernel_remove_initrd %{buildrel}smp
+%postun -n %{kname}-%{buildrel}
+/sbin/kernel_remove_initrd %{buildrel}
 
 
 
-### kernel-smp-devel
-%post -n %{kname}-smp-devel-%{buildrel}
+### kernel-devel
+%post -n %{kname}-devel-%{buildrel}
 # place /build and /source symlinks in place.
-if [ -d /lib/modules/%{buildrel}smp ]; then
-    ln -sf /usr/src/%{kname}-devel-%{buildrel}smp /lib/modules/%{buildrel}smp/build
-    ln -sf /usr/src/%{kname}-devel-%{buildrel}smp /lib/modules/%{buildrel}smp/source
+if [ -d /lib/modules/%{buildrel} ]; then
+    ln -sf /usr/src/%{kname}-devel-%{buildrel} /lib/modules/%{buildrel}/build
+    ln -sf /usr/src/%{kname}-devel-%{buildrel} /lib/modules/%{buildrel}/source
 fi
 
-%preun -n %{kname}-smp-devel-%{buildrel}
+%preun -n %{kname}-devel-%{buildrel}
 # we need to delete <modules>/{build,source} at uninstall
-if [ -L /lib/modules/%{buildrel}smp/build ]; then
-    rm -f /lib/modules/%{buildrel}smp/build
+if [ -L /lib/modules/%{buildrel}/build ]; then
+    rm -f /lib/modules/%{buildrel}/build
 fi
-if [ -L /lib/modules/%{buildrel}smp/source ]; then
-    rm -f /lib/modules/%{buildrel}smp/source
+if [ -L /lib/modules/%{buildrel}/source ]; then
+    rm -f /lib/modules/%{buildrel}/source
 fi
 exit 0
 
@@ -829,7 +829,7 @@ exit 0
 ### file lists
 ###
 %if %build_smp
-%files -n %{kname}-smp-%{buildrel} -f kernel_files.%{buildrel}smp
+%files -n %{kname}-%{buildrel} -f kernel_files.%{buildrel}
 %endif
 
 %if %build_source
@@ -904,9 +904,9 @@ exit 0
 %endif
 
 %if %build_devel
-# kernel-smp-devel
+# kernel-devel
 %if %build_smp
-%files -n %{kname}-smp-devel-%{buildrel}
+%files -n %{kname}-devel-%{buildrel}
 %defattr(-,root,root)
 %dir %{_smp_develdir}
 %dir %{_smp_develdir}/arch
@@ -982,7 +982,7 @@ exit 0
 %endif
 
 %if %build_smp
-%files -n %{kname}-smp-latest
+%files -n %{kname}-latest
 %defattr(-,root,root)
 %endif
 
@@ -993,7 +993,7 @@ exit 0
 
 %if %build_devel
 %if %build_smp
-%files -n %{kname}-smp-devel-latest
+%files -n %{kname}-devel-latest
 %defattr(-,root,root)
 %endif #build_smp
 %endif #build_devel
