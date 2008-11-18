@@ -137,9 +137,10 @@ Source3:	kbuild-really-dont-remove-bounds-asm-offsets-headers.patch
 Source4:  	README.kernel-sources
 Source5:  	README.MandrivaLinux
 
-Source21: 	i386-smp.config
-Source23: 	x86_64-smp.config
-Source25: 	sparc64-smp.config
+# Kernel defconfigs
+Source20: 	i386_defconfig
+Source21: 	x86_64_defconfig
+Source22: 	sparc64_defconfig
 
 
 ####################################################################
@@ -409,19 +410,10 @@ popd
 # Setup Begin
 #
 
-pushd ${RPM_SOURCE_DIR}
-
-#
-# Copy our defconfigs into place.
-for i in sparc64; do
-	cp -f $i.config %{build_dir}/linux-%{tar_ver}/arch/$i/defconfig
-	cp -f $i-smp.config %{build_dir}/linux-%{tar_ver}/arch/$i/defconfig-smp
-done
-for i in i386 x86_64; do
-	cp -f $i.config %{build_dir}/linux-%{tar_ver}/arch/x86/configs/$i\_defconfig
-	cp -f $i-smp.config %{build_dir}/linux-%{tar_ver}/arch/x86/configs/$i\_defconfig-smp
-done
-popd
+# Install defconfigs...
+install %{SOURCE20} %{build_dir}/linux-%{tar_ver}/arch/x86/configs/
+install %{SOURCE21} %{build_dir}/linux-%{tar_ver}/arch/x86/configs/
+install %{SOURCE22} %{build_dir}/linux-%{tar_ver}/arch/sparc64/defconfig
 
 # make sure the kernel has the sublevel we know it has...
 LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" linux-%{tar_ver}/Makefile
@@ -466,9 +458,9 @@ PrepareKernel() {
 
 	%smake -s mrproper
 	%ifarch %{ix86} x86_64
-		cp arch/x86/configs/%{target_arch}_$config_name .config
+		cp arch/x86/configs/%{target_arch}_defconfig .config
 	%else
-		cp arch/%{target_arch}/$config_name .config
+		cp arch/%{target_arch}/defconfig .config
 	%endif
 	%smake oldconfig
 }
@@ -584,8 +576,8 @@ CreateKernel() {
 		KernelVer=%{buildrel}
 		PrepareKernel "" %{buildrpmrel}
 	else
-		KernelVer=%{buildrel}$flavour
-		PrepareKernel $flavour %{buildrpmrel}$flavour
+		KernelVer=%{buildrel}
+		PrepareKernel $flavour %{buildrpmrel}
 	fi
 
 	BuildKernel $KernelVer
@@ -652,8 +644,6 @@ install -d %{target_source}
 tar cf - . | tar xf - -C %{target_source}
 chmod -R a+rX %{target_source}
 
-
-
 # we remove all the source files that we don't ship
 
 # first architecture files
@@ -665,7 +655,6 @@ for i in alpha arm avr32 blackfin cris frv h8300 ia64 mips m32r m68k \
 %if %build_devel
 	rm -rf %{target_devel}/arch/$i
 	rm -rf %{target_devel}/include/asm-$i
-%endif
 %endif	
 done
 
