@@ -322,6 +322,7 @@ Release:        %{rpmrel}
 Summary: 	Virtual rpm for latest %{kname}
 Group: 	  	System/Kernel and hardware
 Requires: 	%{kname}-%{buildrel}
+Obsoletes:	%{kname}-smp-latest
 %ifarch %{ix86}	
 Conflicts:	arch(x86_64)
 %endif
@@ -367,6 +368,7 @@ Release:        %{rpmrel}
 Summary: 	Virtual rpm for latest %{kname}-devel
 Group: 	  	System/Kernel and hardware
 Requires: 	%{kname}-devel-%{buildrel}
+Obsoletes:	%{kname}-smp-devel-latest
 Obsoletes:	%{kname}-smp-headers-latest
 %ifarch %{ix86}	
 Conflicts:	arch(x86_64)
