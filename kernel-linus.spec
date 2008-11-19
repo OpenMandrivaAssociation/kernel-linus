@@ -189,7 +189,6 @@ Source package to build the Linux kernel.
 %{klinus_notice}
 
 
-
 #
 # kernel: Symmetric MultiProcessing kernel
 #
@@ -236,8 +235,7 @@ For instructions for update, see:
 http://www.mandriva.com/en/security/kernelupdate
 
 %{klinus_notice}
-%endif #build_kernel
-
+%endif # build_kernel
 
 
 #
@@ -258,9 +256,9 @@ Conflicts:	arch(x86_64)
 %endif
 
 %description -n %{kname}-source-%{buildrel}
-The %{kname}-source package contains the source code files for the Linux 
-kernel. Theese source files are only needed if you want to build your own 
-custom kernel that is better tuned to your particular hardware.
+The %{kname}-source package contains the source code files for the 
+Linux kernel. Theese source files are only needed if you want to build 
+your own custom kernel that is better tuned to your particular hardware.
 
 If you only want the files needed to build 3rdparty (nVidia, Ati, dkms-*,...)
 drivers against, install the *-devel-* rpm that is matching your kernel.
@@ -272,11 +270,10 @@ http://www.mandriva.com/en/security/kernelupdate
 %endif #build_source
 
 
-
-%if %build_devel
 # 
 # kernel-devel: stripped kernel sources 
 #
+%if %build_devel
 %package -n %{kname}-devel-%{buildrel}
 Version:	%{fakever}
 Release:	%{fakerel}
@@ -298,7 +295,6 @@ If you want to build your own kernel, you need to install the full
 
 %{klinus_notice}
 %endif #build_devel
-
 
 
 #
@@ -328,7 +324,6 @@ http://www.mandriva.com/en/security/kernelupdate
 %endif #build_doc
 
 
-
 #
 # kernel-latest: virtual rpm
 #
@@ -350,7 +345,6 @@ latest %{kname} installed...
 
 %{klinus_notice}
 %endif #build_kernel
-
 
 
 #
@@ -375,10 +369,10 @@ latest %{kname}-source installed...
 %endif #build_source
 
 
-%if %build_devel
 #
 # kernel-devel-latest: virtual rpm
 #
+%if %build_devel
 %package -n %{kname}-devel-latest
 Version:        %{kversion}
 Release:        %{rpmrel}
@@ -397,7 +391,6 @@ latest %{kname}-devel installed...
 
 %{klinus_notice}
 %endif #build_devel
-
 
 
 #
@@ -421,10 +414,10 @@ popd
 # PATCH END
 
 
-
 #
 # Setup Begin
 #
+
 
 # Install defconfigs...
 install %{SOURCE20} %{build_dir}/linux-%{tar_ver}/arch/x86/configs/
@@ -435,14 +428,12 @@ install %{SOURCE22} %{build_dir}/linux-%{tar_ver}/arch/sparc64/defconfig
 LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" linux-%{tar_ver}/Makefile
 
 
-
 %build
 # Common target directories
 %define _bootdir /boot
 %define _modulesdir /lib/modules
 %define _kerneldir /usr/src/%{kname}-%{buildrel}
 %define _develdir /usr/src/%{kname}-devel-%{buildrel}
-
 
 
 # Directories definition needed for building
@@ -453,190 +444,109 @@ LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" linux-%{tar_ver}/
 %define temp_devel %{temp_root}%{_develdir}
 
 
-
-PrepareKernel() {
-	name=$1
-	extension=$2
-	echo "Prepare compilation of kernel $extension"
-
-	if [ "$name" ]; then
-		config_name="defconfig-$name"
-	else
-		config_name="defconfig"
-	fi
-
-	# make sure EXTRAVERSION says what we want it to say
-	%if %kstable
-		LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = .%{kstable}-$extension/" Makefile
-	%else
-		LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -$extension/" Makefile
-	%endif
-
-	%smake -s mrproper
-	%ifarch %{ix86} x86_64
-		cp arch/x86/configs/%{target_arch}_defconfig .config
-	%else
-		cp arch/%{target_arch}/defconfig .config
-	%endif
-	%smake oldconfig
-}
-
-
-
-BuildKernel() {
-	KernelVer=$1
-	echo "Building kernel $KernelVer"
-
-	%kmake all
-
-	## Start installing stuff
-	install -d %{temp_boot}
-	install -m 644 System.map %{temp_boot}/System.map-$KernelVer
-	install -m 644 .config %{temp_boot}/config-$KernelVer
-
-	%ifarch sparc64
-	gzip -9c vmlinux > %{temp_boot}/vmlinuz-$KernelVer
-	%else
-	cp -f arch/%{target_arch}/boot/bzImage %{temp_boot}/vmlinuz-$KernelVer
-	%endif
-
-	# modules
-	install -d %{temp_modules}/$KernelVer
-	%smake INSTALL_MOD_PATH=%{temp_root} KERNELRELEASE=$KernelVer modules_install 
-	
-	# remove /lib/firmware, we use a separate kernel-firmware
-	rm -rf %{temp_root}/lib/firmware
-}
-
-
-
-SaveDevel() {
-	flavour=$1
-	if [ "$flavour" = "up" ]; then
-		DevelRoot=%{temp_up_devel}
-	else
-		DevelRoot=%{temp_devel}
-	fi
-	mkdir -p $DevelRoot
-	for i in $(find . -name 'Makefile*'); do cp -R --parents $i $DevelRoot;done
-	for i in $(find . -name 'Kconfig*' -o -name 'Kbuild*'); do cp -R --parents $i $DevelRoot;done
-	cp -fR include $DevelRoot
-	cp -fR scripts $DevelRoot
-	%ifarch %{ix86} x86_64
-		cp -fR arch/x86/kernel/asm-offsets.{c,s} $DevelRoot/arch/x86/kernel/
-		cp -fR arch/x86/kernel/asm-offsets_{32,64}.c $DevelRoot/arch/x86/kernel/
-		cp -fR arch/x86/include $DevelRoot/arch/x86/
-	%else
-		cp -fR arch/%{target_arch}/kernel/asm-offsets.{c,s} $DevelRoot/arch/%{target_arch}/kernel/
-		cp -fR arch/%{target_arch}/include $DevelRoot/arch/%{target_arch}/
-	%endif
-	%ifarch %{ix86}
-		cp -fR arch/x86/kernel/sigframe.h $DevelRoot/arch/x86/kernel/
-	%endif
-	
-	# needed for generation of kernel/bounds.s
-	cp -fR kernel/bounds.c $DevelRoot/kernel/
-	
-	# needed for lguest
-	cp -fR drivers/lguest/lg.h $DevelRoot/drivers/lguest/
-	
-	cp -fR .config Module.symvers $DevelRoot
-	
-        # Needed for truecrypt build (Danny)
-	cp -fR drivers/md/dm.h $DevelRoot/drivers/md/
-
-	# Needed for external dvb tree (#41418)
-	cp -fR drivers/media/dvb/dvb-core/*.h $DevelRoot/drivers/media/dvb/dvb-core/
-	cp -fR drivers/media/dvb/frontends/lgdt330x.h $DevelRoot/drivers/media/dvb/frontends/
-
-
-	# disable bounds.h and asm-offsets.h removal
-	patch -p1 -d $DevelRoot -i %{SOURCE3}
-
-	# check and clean the -devel tree
-	pushd $DevelRoot >/dev/null
-		%smake -s prepare scripts clean
-		rm -f .config.old
-	popd >/dev/null
-
-	# disable mrproper and other targets
-	patch -p1 -d $DevelRoot -i %{SOURCE2}
-
-	# fix permissions
-	chmod -R a+rX $DevelRoot
-}
-
-
-
-CreateFiles() {
-	kernversion=$1
-	output=../kernel_files.$kernversion
-
-	echo "%defattr(-,root,root)" > $output
-	echo "%{_bootdir}/config-${kernversion}" >> $output
-	echo "%{_bootdir}/vmlinuz-${kernversion}" >> $output
-	echo "%{_bootdir}/System.map-${kernversion}" >> $output
-	echo "%dir %{_modulesdir}/${kernversion}/" >> $output
-	echo "%{_modulesdir}/${kernversion}/kernel" >> $output
-	echo "%{_modulesdir}/${kernversion}/modules.*" >> $output
-	echo "%doc README.kernel-sources" >> $output
-	echo "%doc README.MandrivaLinux" >> $output
-}
-
-
-
-CreateKernel() {
-	flavour=$1
-
-	if [ "$flavour" = "up" ]; then
-		KernelVer=%{buildrel}
-		PrepareKernel "" %{buildrpmrel}
-	else
-		KernelVer=%{buildrel}
-		PrepareKernel $flavour %{buildrpmrel}
-	fi
-
-	BuildKernel $KernelVer
-	%if %build_devel
-	    SaveDevel $flavour
-	%endif
-        CreateFiles $KernelVer
-}
-
-
-
-###
-# DO it...
-###
-
-
-
 # Create a simulacro of buildroot
 rm -rf %{temp_root}
 install -d %{temp_root}
 
 
+# make sure we are in the directory
+cd %{src_dir}
+
+# make sure EXTRAVERSION says what we want it to say
+%if %kstable
+	LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = .%{kstable}-%{buildrpmrel}/" Makefile
+%else
+	LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{buildrpmrel}/" Makefile
+%endif
+
+# Prepare the kernel
+%smake -s mrproper
+%ifarch %{ix86} x86_64
+	cp arch/x86/configs/%{target_arch}_defconfig .config
+%else
+	cp arch/%{target_arch}/defconfig .config
+%endif
+%smake oldconfig
+
+# Build the kernel
+%kmake all
+
+# Install kernel
+install -d %{temp_boot}
+install -m 644 System.map %{temp_boot}/System.map-%{buildrel}
+install -m 644 .config %{temp_boot}/config-%{buildrel}
+%ifarch sparc64
+	gzip -9c vmlinux > %{temp_boot}/vmlinuz-%{buildrel}
+%else
+	cp -f arch/%{target_arch}/boot/bzImage %{temp_boot}/vmlinuz-%{buildrel}
+%endif
+
+# Install modules
+install -d %{temp_modules}/%{buildrel}
+%smake INSTALL_MOD_PATH=%{temp_root} KERNELRELEASE=%{buildrel} modules_install 
+
+# remove /lib/firmware, we use a separate kernel-firmware
+rm -rf %{temp_root}/lib/firmware
+
+# Save devel tree
+mkdir -p %{temp_devel}
+for i in $(find . -name 'Makefile*'); do cp -R --parents $i %{temp_devel};done
+for i in $(find . -name 'Kconfig*' -o -name 'Kbuild*'); do cp -R --parents $i %{temp_devel};done
+cp -fR include %{temp_devel}
+cp -fR scripts %{temp_devel}
+%ifarch %{ix86} x86_64
+	cp -fR arch/x86/kernel/asm-offsets.{c,s} %{temp_devel}/arch/x86/kernel/
+	cp -fR arch/x86/kernel/asm-offsets_{32,64}.c %{temp_devel}/arch/x86/kernel/
+	cp -fR arch/x86/include %{temp_devel}/arch/x86/
+%else
+	cp -fR arch/%{target_arch}/kernel/asm-offsets.{c,s} %{temp_devel}/arch/%{target_arch}/kernel/
+	cp -fR arch/%{target_arch}/include %{temp_devel}/arch/%{target_arch}/
+%endif
+%ifarch %{ix86}
+	cp -fR arch/x86/kernel/sigframe.h %{temp_devel}/arch/x86/kernel/
+%endif
+	
+# Needed for generation of kernel/bounds.s
+cp -fR kernel/bounds.c %{temp_devel}/kernel/
+	
+# Needed for lguest
+cp -fR drivers/lguest/lg.h %{temp_devel}/drivers/lguest/
+	
+cp -fR .config Module.symvers %{temp_devel}
+	
+# Needed for truecrypt build (Danny)
+cp -fR drivers/md/dm.h %{temp_devel}/drivers/md/
+
+# Needed for external dvb tree (#41418)
+cp -fR drivers/media/dvb/dvb-core/*.h %{temp_devel}/drivers/media/dvb/dvb-core/
+cp -fR drivers/media/dvb/frontends/lgdt330x.h %{temp_devel}/drivers/media/dvb/frontends/
+
+
+# Disable bounds.h and asm-offsets.h removal
+patch -p1 -d %{temp_devel} -i %{SOURCE3}
+
+# Check and clean the -devel tree
+pushd %{temp_devel} >/dev/null
+    %smake -s prepare scripts clean
+    rm -f .config.old
+popd >/dev/null
+
+# Disable mrproper and other targets
+patch -p1 -d %{temp_devel} -i %{SOURCE2}
+
+# Fix permissions
+chmod -R a+rX %{temp_devel}
+
 
 #make sure we are in the directory
 cd %src_dir
 
-%if %build_kernel
-CreateKernel smp
-%endif
-
-
-
-# We don't make to repeat the depend code at the install phase
-%if %build_source
-PrepareKernel "" %{buildrpmrel}custom
-# kernel-source is shipped as an upnprepared tree
+# kernel-source is shipped as an unprepared tree
 %smake -s mrproper
-%endif
-
 
 
 ###
-### install
+### Install
 ###
 %install
 install -m 644 %{SOURCE4}  .
@@ -704,10 +614,8 @@ rm -f %{target_source}/{.config.old,.config.cmd,.tmp_gas_check,.mailmap,.missing
 %endif
 
 
-
 # gzipping modules
 find %{target_modules} -name "*.ko" | xargs gzip -9
-
 
 
 # We used to have a copy of PrepareKernel here
@@ -718,10 +626,8 @@ for i in %{target_modules}/*; do
 done
 
 
-
 # sniff, if we gzipped all the modules, we change the stamp :(
 # we really need the depmod -ae here
-
 pushd %{target_modules}
 for i in *; do
 	/sbin/depmod -u -ae -b %{buildroot} -r -F %{target_boot}/System.map-$i $i
@@ -739,9 +645,8 @@ done
 popd
 
 
-
 ###
-### clean
+### Clean
 ###
 
 %clean
@@ -752,12 +657,12 @@ rm -rf %{buildroot}
 #rm -rf %{temp_root} 
 
 
-
 ###
-### scripts
+### Scripts
 ###
 
-### SMP kernel
+### kernel
+%if %build_kernel
 %preun -n %{kname}-%{buildrel}
 /sbin/installkernel -R %{buildrel}
 if [ -L /lib/modules/%{buildrel}/build ]; then
@@ -777,10 +682,11 @@ fi
 
 %postun -n %{kname}-%{buildrel}
 /sbin/kernel_remove_initrd %{buildrel}
-
+%endif # build_kernel
 
 
 ### kernel-devel
+%if %build_devel
 %post -n %{kname}-devel-%{buildrel}
 # place /build and /source symlinks in place.
 if [ -d /lib/modules/%{buildrel} ]; then
@@ -797,10 +703,11 @@ if [ -L /lib/modules/%{buildrel}/source ]; then
     rm -f /lib/modules/%{buildrel}/source
 fi
 exit 0
-
+%endif #build_devel
 
 
 ### kernel-source
+%if %build_source
 %post -n %{kname}-source-%{buildrel}
 for i in /lib/modules/%{buildrel}*; do
 	if [ -d $i ]; then
@@ -821,15 +728,28 @@ for i in /lib/modules/%{buildrel}/{build,source}; do
 	fi
 done
 exit 0
+%endif # build_source
 												
 
 ###
 ### file lists
 ###
-%if %build_kernel
-%files -n %{kname}-%{buildrel} -f kernel_files.%{buildrel}
-%endif
 
+# kernel
+%if %build_kernel
+%files -n %{kname}-%{buildrel}
+%defattr(-,root,root)
+%{_bootdir}/config-%{buildrel}
+%{_bootdir}/vmlinuz-%{buildrel}
+%{_bootdir}/System.map-%{buildrel}
+%dir %{_modulesdir}/%{buildrel}/
+%{_modulesdir}/%{buildrel}/kernel
+%{_modulesdir}/%{buildrel}/modules.*
+%doc README.kernel-sources
+%doc README.MandrivaLinux
+%endif # build_kernel
+
+# kernel-source
 %if %build_source
 %files -n %{kname}-source-%{buildrel}
 %defattr(-,root,root)
@@ -899,10 +819,10 @@ exit 0
 %{_kerneldir}/virt
 %doc README.kernel-sources
 %doc README.MandrivaLinux
-%endif
+%endif # build_source
 
-%if %build_devel
 # kernel-devel
+%if %build_devel
 %files -n %{kname}-devel-%{buildrel}
 %defattr(-,root,root)
 %dir %{_develdir}
@@ -968,26 +888,26 @@ exit 0
 %{_develdir}/usr
 %doc README.kernel-sources
 %doc README.MandrivaLinux
-%endif #endif %build_devel
+%endif # build_devel
 
 
 %if %build_doc
 %files -n %{kname}-doc
 %defattr(-,root,root)
 %doc linux-%{tar_ver}/Documentation/*
-%endif
+%endif # build_dov
 
 %if %build_kernel
 %files -n %{kname}-latest
 %defattr(-,root,root)
-%endif
+%endif # build_kernel
 
 %if %build_source
 %files -n %{kname}-source-latest
 %defattr(-,root,root)
-%endif
+%endif # build_source
 
 %if %build_devel
 %files -n %{kname}-devel-latest
 %defattr(-,root,root)
-%endif #build_devel
+%endif # build_devel
