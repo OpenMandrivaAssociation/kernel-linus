@@ -502,9 +502,6 @@ cp -fR scripts %{temp_devel}
 	cp -fR arch/%{target_arch}/kernel/asm-offsets.{c,s} %{temp_devel}/arch/%{target_arch}/kernel/
 	cp -fR arch/%{target_arch}/include %{temp_devel}/arch/%{target_arch}/
 %endif
-%ifarch %{ix86}
-	cp -fR arch/x86/kernel/sigframe.h %{temp_devel}/arch/x86/kernel/
-%endif
 	
 # Needed for generation of kernel/bounds.s
 cp -fR kernel/bounds.c %{temp_devel}/kernel/
