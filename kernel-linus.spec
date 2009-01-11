@@ -422,7 +422,7 @@ popd
 # Install defconfigs...
 install %{SOURCE20} %{build_dir}/linux-%{tar_ver}/arch/x86/configs/
 install %{SOURCE21} %{build_dir}/linux-%{tar_ver}/arch/x86/configs/
-install %{SOURCE22} %{build_dir}/linux-%{tar_ver}/arch/sparc64/defconfig
+install %{SOURCE22} %{build_dir}/linux-%{tar_ver}/arch/sparc/configs/
 
 # make sure the kernel has the sublevel we know it has...
 LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" linux-%{tar_ver}/Makefile
@@ -595,14 +595,8 @@ done
 %endif
 %ifnarch sparc sparc64
 	rm -rf %{target_source}/arch/sparc
-	rm -rf %{target_source}/arch/sparc64
-	rm -rf %{target_source}/include/asm-sparc
-	rm -rf %{target_source}/include/asm-sparc64
 %if %build_devel
 	rm -rf %{target_devel}/arch/sparc
-	rm -rf %{target_devel}/arch/sparc64
-	rm -rf %{target_devel}/include/asm-sparc
-	rm -rf %{target_devel}/include/asm-sparc64
 %endif	
 %endif
 
@@ -768,7 +762,6 @@ exit 0
 %{_kerneldir}/arch/Kconfig
 %ifarch sparc sparc64
 %{_kerneldir}/arch/sparc
-%{_kerneldir}/arch/sparc64
 %endif
 %ifarch %{ix86} x86_64
 %{_kerneldir}/arch/x86
@@ -784,7 +777,6 @@ exit 0
 %{_kerneldir}/include/asm-generic
 %ifarch sparc sparc64
 %{_kerneldir}/include/asm-sparc
-%{_kerneldir}/include/asm-sparc64
 %endif
 %ifarch %{ix86} x86_64
 %{_kerneldir}/include/asm-x86
@@ -836,7 +828,6 @@ exit 0
 %{_develdir}/arch/Kconfig
 %ifarch sparc sparc64
 %{_develdir}/arch/sparc
-%{_develdir}/arch/sparc64
 %endif
 %ifarch %{ix86} x86_64
 %{_develdir}/arch/x86
@@ -853,7 +844,6 @@ exit 0
 %{_develdir}/include/asm-generic
 %ifarch sparc sparc64
 %{_develdir}/include/asm-sparc
-%{_develdir}/include/asm-sparc64
 %endif
 %ifarch %{ix86} x86_64
 %{_develdir}/include/asm-x86
