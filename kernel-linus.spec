@@ -17,7 +17,7 @@
 %define kgit		0
 
 # this is the releaseversion
-%define mdvrelease 	1
+%define mdvrelease 	2
 
 # This is only to make life easier for people that creates derivated kernels
 # a.k.a name it kernel-tmb :)
@@ -518,6 +518,8 @@ cp -fR drivers/md/dm.h %{temp_devel}/drivers/md/
 cp -fR drivers/media/dvb/dvb-core/*.h %{temp_devel}/drivers/media/dvb/dvb-core/
 cp -fR drivers/media/dvb/frontends/lgdt330x.h %{temp_devel}/drivers/media/dvb/frontends/
 
+# add acpica header files, needed for fglrx build
+cp -fR drivers/acpi/acpica/*.h %{temp_devel}/drivers/acpi/acpica/
 
 # Disable bounds.h and asm-offsets.h removal
 patch -p1 -d %{temp_devel} -i %{SOURCE3}
