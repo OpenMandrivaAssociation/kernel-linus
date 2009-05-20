@@ -14,10 +14,10 @@
 %define kstable		0
 
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		0
+%define kgit		5
 
 # this is the releaseversion
-%define mdvrelease 	2
+%define mdvrelease 	1
 
 # This is only to make life easier for people that creates derivated kernels
 # a.k.a name it kernel-tmb :)
