@@ -17,7 +17,7 @@
 %define kgit		0
 
 # this is the releaseversion
-%define mdvrelease 	1
+%define mdvrelease 	2
 
 # This is only to make life easier for people that creates derivated kernels
 # a.k.a name it kernel-tmb :)
@@ -502,15 +502,15 @@ cp -fR scripts %{temp_devel}
 	cp -fR arch/%{target_arch}/kernel/asm-offsets.{c,s} %{temp_devel}/arch/%{target_arch}/kernel/
 	cp -fR arch/%{target_arch}/include %{temp_devel}/arch/%{target_arch}/
 %endif
-	
+
 # Needed for generation of kernel/bounds.s
 cp -fR kernel/bounds.c %{temp_devel}/kernel/
-	
+
 # Needed for lguest
 cp -fR drivers/lguest/lg.h %{temp_devel}/drivers/lguest/
-	
+
 cp -fR .config Module.symvers %{temp_devel}
-	
+
 # Needed for truecrypt build (Danny)
 cp -fR drivers/md/dm.h %{temp_devel}/drivers/md/
 
@@ -711,7 +711,7 @@ for i in /lib/modules/%{buildrel}*; do
 		fi
 	fi
 done
-								
+
 %preun -n %{kname}-source-%{buildrel}
 for i in /lib/modules/%{buildrel}/{build,source}; do
 	if [ -L $i ]; then
@@ -722,7 +722,7 @@ for i in /lib/modules/%{buildrel}/{build,source}; do
 done
 exit 0
 %endif # build_source
-												
+
 
 ###
 ### file lists
