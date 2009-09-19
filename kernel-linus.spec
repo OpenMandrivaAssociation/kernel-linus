@@ -106,6 +106,11 @@
 # there are places where parallel make don't work
 %define smake make
 
+# Parallelize xargs invocations on smp machines
+%define kxargs xargs %([ -z "$RPM_BUILD_NCPUS" ] \\\
+	&& RPM_BUILD_NCPUS="`/usr/bin/getconf _NPROCESSORS_ONLN`"; \\\
+	[ "$RPM_BUILD_NCPUS" -gt 1 ] && echo "-P $RPM_BUILD_NCPUS")
+
 # Aliases for amd64 builds (better make source links?)
 %define target_cpu	%(echo %{_target_cpu} | sed -e "s/amd64/x86_64/")
 %define target_arch	%(echo %{_arch} | sed -e "s/amd64/x86_64/" -e "s/sparc/%{_target_cpu}/")
@@ -608,7 +613,7 @@ rm -f %{target_source}/{.config.old,.config.cmd,.tmp_gas_check,.mailmap,.missing
 
 
 # gzipping modules
-find %{target_modules} -name "*.ko" | xargs gzip -9
+find %{target_modules} -name "*.ko" | %kxargs gzip -9
 
 
 # We used to have a copy of PrepareKernel here
@@ -631,7 +636,7 @@ for i in *; do
 	pushd $i
 	echo "Creating module.description for $i"
 	modules=`find . -name "*.ko.gz"`
-	echo $modules | xargs /sbin/modinfo-25 \
+	echo $modules | %kxargs /sbin/modinfo-25 \
 	| perl -lne 'print "$name\t$1" if $name && /^description:\s*(.*)/; $name = $1 if m!^filename:\s*(.*)\.k?o!; $name =~ s!.*/!!' > modules.description
 	popd
 done
