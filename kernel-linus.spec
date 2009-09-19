@@ -7,8 +7,8 @@
 %define patchlevel	6
 %define sublevel	31
 
-# kernel Makefile extraversion is substituted by 
-# kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
+# kernel Makefile extraversion is substituted by
+# kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit)
 # or stable release (kstable)
 %define kpatch		0
 %define kstable		0
@@ -101,7 +101,7 @@
 %if %(if [ -z "$CC" ] ; then echo 0; else echo 1; fi)
 %define kmake %make CC="$CC"
 %else
-%define kmake %make 
+%define kmake %make
 %endif
 # there are places where parallel make don't work
 %define smake make
@@ -176,8 +176,8 @@ Source11:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchl
 ####################################################################
 
 # Defines for the things that are needed for all the kernels
-%define requires1 module-init-tools >= 3.0-%mkrel 7
-%define requires2 mkinitrd >= 3.4.43-%mkrel 10
+%define requires1 module-init-tools >= 3.0-7
+%define requires2 mkinitrd >= 3.4.43-10
 %define requires3 bootloader-utils >= 1.9
 %define requires4 sysfsutils module-init-tools >= 0.9.15
 %define requires5 kernel-firmware >= 2.6.27-0.rc2.2mdv
@@ -215,23 +215,23 @@ Requires:	%requires3
 Requires:	%requires4
 Requires: 	%requires5
 
-%ifarch %{ix86}	
+%ifarch %{ix86}
 Conflicts:	arch(x86_64)
 %endif
 
 %description -n %{kname}-%{buildrel}
 %ifarch %{ix86}
-This kernel is compiled for desktop use, single or multiple i586 
+This kernel is compiled for desktop use, single or multiple i586
 processor(s)/core(s) and less than 4GB RAM, using HZ_1000, voluntary
 preempt, CFS cpu scheduler and cfq i/o scheduler.
-This kernel relies on in-kernel smp alternatives to switch between 
+This kernel relies on in-kernel smp alternatives to switch between
 up & smp mode depending on detected hardware. To force the kernel
 to boot in single processor mode, use the "nosmp" boot parameter.
 %else
 This kernel is compiled for desktop use, single or multiple %{_arch}
-processor(s)/core(s), using HZ_1000, voluntary preempt, CFS cpu 
+processor(s)/core(s), using HZ_1000, voluntary preempt, CFS cpu
 scheduler and cfq i/o scheduler.
-This kernel relies on in-kernel smp alternatives to switch between 
+This kernel relies on in-kernel smp alternatives to switch between
 up & smp mode depending on detected hardware. To force the kernel
 to boot in single processor mode, use the "nosmp" boot parameter.
 %endif
@@ -256,13 +256,13 @@ Requires:	glibc-devel, ncurses-devel, make, gcc, perl
 Summary:	The source code for the Linux kernel
 Group:		Development/Kernel
 Autoreqprov: 	no
-%ifarch %{ix86}	
+%ifarch %{ix86}
 Conflicts:	arch(x86_64)
 %endif
 
 %description -n %{kname}-source-%{buildrel}
-The %{kname}-source package contains the source code files for the 
-Linux kernel. Theese source files are only needed if you want to build 
+The %{kname}-source package contains the source code files for the
+Linux kernel. Theese source files are only needed if you want to build
 your own custom kernel that is better tuned to your particular hardware.
 
 If you only want the files needed to build 3rdparty (nVidia, Ati, dkms-*,...)
@@ -275,8 +275,8 @@ http://www.mandriva.com/en/security/kernelupdate
 %endif #build_source
 
 
-# 
-# kernel-devel: stripped kernel sources 
+#
+# kernel-devel: stripped kernel sources
 #
 %if %build_devel
 %package -n %{kname}-devel-%{buildrel}
@@ -287,15 +287,15 @@ Summary:	The %{kname} devel files for 3rdparty modules build
 Group:		Development/Kernel
 Autoreqprov:	no
 Requires:	glibc-devel, ncurses-devel, make, gcc, perl
-%ifarch %{ix86}	
+%ifarch %{ix86}
 Conflicts:	arch(x86_64)
 %endif
 
 %description -n %{kname}-devel-%{buildrel}
-This package contains the kernel-devel files that should be enough to build 
+This package contains the kernel-devel files that should be enough to build
 3rdparty drivers against for use with the %{kname}-%{buildrel}.
 
-If you want to build your own kernel, you need to install the full 
+If you want to build your own kernel, you need to install the full
 %{kname}-source-%{buildrel} rpm.
 
 %{klinus_notice}
@@ -311,7 +311,7 @@ Version:        %{kversion}
 Release:        %{rpmrel}
 Summary:	Various documentation bits found in the kernel source
 Group:		Books/Computer books
-%ifarch %{ix86}	
+%ifarch %{ix86}
 Conflicts:	arch(x86_64)
 %endif
 
@@ -340,7 +340,7 @@ Summary: 	Virtual rpm for latest %{kname}
 Group: 	  	System/Kernel and hardware
 Requires: 	%{kname}-%{buildrel}
 Obsoletes:	%{kname}-smp-latest
-%ifarch %{ix86}	
+%ifarch %{ix86}
 Conflicts:	arch(x86_64)
 %endif
 
@@ -362,7 +362,7 @@ Release:        %{rpmrel}
 Summary: 	Virtual rpm for latest %{kname}-source
 Group: 	  	System/Kernel and hardware
 Requires: 	%{kname}-source-%{buildrel}
-%ifarch %{ix86}	
+%ifarch %{ix86}
 Conflicts:	arch(x86_64)
 %endif
 
@@ -386,7 +386,7 @@ Group: 	  	System/Kernel and hardware
 Requires: 	%{kname}-devel-%{buildrel}
 Obsoletes:	%{kname}-smp-devel-latest
 Obsoletes:	%{kname}-smp-headers-latest
-%ifarch %{ix86}	
+%ifarch %{ix86}
 Conflicts:	arch(x86_64)
 %endif
 
@@ -494,6 +494,7 @@ install -d %{temp_modules}/%{buildrel}
 rm -rf %{temp_root}/lib/firmware
 
 # Save devel tree
+%if %build_devel
 mkdir -p %{temp_devel}
 for i in $(find . -name 'Makefile*'); do cp -R --parents $i %{temp_devel};done
 for i in $(find . -name 'Kconfig*' -o -name 'Kbuild*'); do cp -R --parents $i %{temp_devel};done
@@ -540,7 +541,7 @@ patch -p1 -d %{temp_devel} -i %{SOURCE2}
 
 # Fix permissions
 chmod -R a+rX %{temp_devel}
-
+%endif # build_devel
 
 #make sure we are in the directory
 cd %src_dir
@@ -569,7 +570,7 @@ cp -a %{temp_root} %{buildroot}
 
 # Create directories infastructure
 %if %build_source
-install -d %{target_source} 
+install -d %{target_source}
 
 tar cf - . | tar xf - -C %{target_source}
 chmod -R a+rX %{target_source}
@@ -585,7 +586,7 @@ for i in alpha arm avr32 blackfin cris frv h8300 ia64 mips microblaze m32r m68k 
 %if %build_devel
 	rm -rf %{target_devel}/arch/$i
 	rm -rf %{target_devel}/include/asm-$i
-%endif	
+%endif
 done
 
 # remove arch files based on target arch
@@ -601,7 +602,7 @@ done
 	rm -rf %{target_source}/arch/sparc
 %if %build_devel
 	rm -rf %{target_devel}/arch/sparc
-%endif	
+%endif
 %endif
 
 
@@ -891,7 +892,7 @@ exit 0
 %files -n %{kname}-doc
 %defattr(-,root,root)
 %doc linux-%{tar_ver}/Documentation/*
-%endif # build_dov
+%endif # build_doc
 
 %if %build_kernel
 %files -n %{kname}-latest
