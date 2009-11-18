@@ -5,16 +5,16 @@
 
 %define kernelversion	2
 %define patchlevel	6
-%define sublevel	31
+%define sublevel	32
 
 # kernel Makefile extraversion is substituted by
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit)
 # or stable release (kstable)
-%define kpatch		0
-%define kstable		6
+%define kpatch		rc7
+%define kstable		0
 
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		0
+%define kgit		1
 
 # this is the releaseversion
 %define mdvrelease 	1
@@ -497,7 +497,7 @@ rm -rf %{temp_root}/lib/firmware
 %if %build_devel
 mkdir -p %{temp_devel}
 for i in $(find . -name 'Makefile*'); do cp -R --parents $i %{temp_devel};done
-for i in $(find . -name 'Kconfig*' -o -name 'Kbuild*'); do cp -R --parents $i %{temp_devel};done
+for i in $(find . -name 'Kconfig*' -o -name 'Kbuild*' -o -name config.mk); do cp -R --parents $i %{temp_devel};done
 cp -fR include %{temp_devel}
 cp -fR scripts %{temp_devel}
 %ifarch %{ix86} x86_64
@@ -579,7 +579,7 @@ chmod -R a+rX %{target_source}
 
 # first architecture files
 for i in alpha arm avr32 blackfin cris frv h8300 ia64 mips microblaze m32r m68k \
-	 m68knommu mn10300 parisc powerpc ppc sh sh64 s390 v850 xtensa; do
+	 m68knommu mn10300 parisc powerpc ppc sh sh64 s390 v850 xtensa score; do
 	rm -rf %{target_source}/arch/$i
 	rm -rf %{target_source}/include/asm-$i
 
@@ -883,6 +883,7 @@ exit 0
 %{_develdir}/sound
 %{_develdir}/tools
 %{_develdir}/usr
+%{_develdir}/virt
 %doc README.kernel-sources
 %doc README.MandrivaLinux
 %endif # build_devel
