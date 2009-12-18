@@ -581,21 +581,17 @@ chmod -R a+rX %{target_source}
 for i in alpha arm avr32 blackfin cris frv h8300 ia64 mips microblaze m32r m68k \
 	 m68knommu mn10300 parisc powerpc ppc sh sh64 s390 v850 xtensa score; do
 	rm -rf %{target_source}/arch/$i
-	rm -rf %{target_source}/include/asm-$i
 
 %if %build_devel
 	rm -rf %{target_devel}/arch/$i
-	rm -rf %{target_devel}/include/asm-$i
 %endif
 done
 
 # remove arch files based on target arch
 %ifnarch %{ix86} x86_64
 	rm -rf %{target_source}/arch/x86
-	rm -rf %{target_source}/include/asm-x86
 %if %build_devel
 	rm -rf %{target_devel}/arch/x86
-	rm -rf %{target_devel}/include/asm-x86
 %endif
 %endif
 %ifnarch sparc sparc64
@@ -780,12 +776,6 @@ exit 0
 %{_kerneldir}/include/Kbuild
 %{_kerneldir}/include/acpi
 %{_kerneldir}/include/asm-generic
-%ifarch sparc sparc64
-%{_kerneldir}/include/asm-sparc
-%endif
-%ifarch %{ix86} x86_64
-%{_kerneldir}/include/asm-x86
-%endif
 %{_kerneldir}/include/crypto
 %{_kerneldir}/include/drm
 %{_kerneldir}/include/linux
@@ -846,14 +836,7 @@ exit 0
 %{_develdir}/fs
 %{_develdir}/include/Kbuild
 %{_develdir}/include/acpi
-%{_develdir}/include/asm
 %{_develdir}/include/asm-generic
-%ifarch sparc sparc64
-%{_develdir}/include/asm-sparc
-%endif
-%ifarch %{ix86} x86_64
-%{_develdir}/include/asm-x86
-%endif
 %{_develdir}/include/config
 %{_develdir}/include/crypto
 %{_develdir}/include/drm
