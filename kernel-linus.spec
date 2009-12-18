@@ -840,6 +840,7 @@ exit 0
 %{_develdir}/include/config
 %{_develdir}/include/crypto
 %{_develdir}/include/drm
+%{_develdir}/include/generated
 %{_develdir}/include/keys
 %{_develdir}/include/linux
 %{_develdir}/include/math-emu
