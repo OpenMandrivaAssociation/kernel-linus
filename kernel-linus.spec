@@ -666,6 +666,18 @@ fi
 if [ -L /lib/modules/%{buildrel}/source ]; then
     rm -f /lib/modules/%{buildrel}/source
 fi
+pushd /boot > /dev/null
+if [ -L vmlinuz-linus ]; then
+    if [ "$(readlink vmlinuz-linus)" = "vmlinuz-%{buildrel}" ]; then
+	rm -f vmlinuz-linus
+    fi
+fi
+if [ -L initrd-linus.img ]; then
+    if [ "$(readlink initrd-linus.img)" = "initrd-%{buildrel}.img" ]; then
+	rm -f initrd-linus.img
+    fi
+fi
+popd > /dev/null
 exit 0
 
 %post -n %{kname}-%{buildrel}
@@ -674,6 +686,16 @@ if [ -d /usr/src/%{kname}-devel-%{buildrel} ]; then
     ln -sf /usr/src/%{kname}-devel-%{buildrel} /lib/modules/%{buildrel}/build
     ln -sf /usr/src/%{kname}-devel-%{buildrel} /lib/modules/%{buildrel}/source
 fi
+pushd /boot > /dev/null
+if [ -L vmlinuz-linus ]; then
+    rm -f vmlinuz-linus
+fi
+ln -sf vmlinuz-%{buildrel} vmlinuz-linus
+if [ -L initrd-linus.img ]; then
+    rm -f initrd-linus.img
+fi
+ln -sf initrd-%{buildrel}.img initrd-linus.img
+popd > /dev/null
 
 %postun -n %{kname}-%{buildrel}
 /sbin/kernel_remove_initrd %{buildrel}
