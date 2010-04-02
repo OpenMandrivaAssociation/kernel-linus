@@ -11,13 +11,13 @@
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit)
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		1
+%define kstable		2
 
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
 # this is the releaseversion
-%define mdvrelease 	2
+%define mdvrelease 	1
 
 # This is only to make life easier for people that creates derivated kernels
 # a.k.a name it kernel-tmb :)
