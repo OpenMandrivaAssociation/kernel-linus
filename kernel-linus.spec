@@ -5,12 +5,12 @@
 
 %define kernelversion	2
 %define patchlevel	6
-%define sublevel	34
+%define sublevel	35
 
 # kernel Makefile extraversion is substituted by
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit)
 # or stable release (kstable)
-%define kpatch		0
+%define kpatch		rc5
 %define kstable		0
 
 # kernel.org -gitX patch (only the number after "git")
@@ -79,7 +79,7 @@
 %define debug_package           %{nil}
 
 # build defines
-%define build_doc 0
+%define build_doc 1
 %define build_source 1
 %define build_devel 1
 
