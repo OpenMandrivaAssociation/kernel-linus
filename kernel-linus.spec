@@ -113,7 +113,7 @@
 
 # Aliases for amd64 builds (better make source links?)
 %define target_cpu	%(echo %{_target_cpu} | sed -e "s/amd64/x86_64/")
-%define target_arch	%(echo %{_arch} | sed -e "s/amd64/x86_64/" -e "s/sparc/%{_target_cpu}/")
+%define target_arch	%(echo %{_arch} | sed -e "s/amd64/x86_64/")
 
 # src.rpm description
 Summary: 	The Linux kernel (the core of the Linux operating system)
@@ -122,7 +122,7 @@ Version:        %{kversion}
 Release:        %{rpmrel}
 License: 	GPLv2
 Group: 		System/Kernel and hardware
-ExclusiveArch: 	%{ix86} x86_64 sparc64
+ExclusiveArch: 	%{ix86} x86_64
 ExclusiveOS: 	Linux
 URL: 		http://wiki.mandriva.com/en/Docs/Howto/Mandriva_Kernels#kernel-linus
 
@@ -145,7 +145,6 @@ Source5:  	README.MandrivaLinux
 # Kernel defconfigs
 Source20: 	i386_defconfig
 Source21: 	x86_64_defconfig
-Source22: 	sparc64_defconfig
 
 
 ####################################################################
@@ -427,7 +426,6 @@ popd
 # Install defconfigs...
 install %{SOURCE20} %{build_dir}/linux-%{tar_ver}/arch/x86/configs/
 install %{SOURCE21} %{build_dir}/linux-%{tar_ver}/arch/x86/configs/
-install %{SOURCE22} %{build_dir}/linux-%{tar_ver}/arch/sparc/configs/
 
 # make sure the kernel has the sublevel we know it has...
 LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" linux-%{tar_ver}/Makefile
@@ -480,11 +478,7 @@ cd %{src_dir}
 install -d %{temp_boot}
 install -m 644 System.map %{temp_boot}/System.map-%{buildrel}
 install -m 644 .config %{temp_boot}/config-%{buildrel}
-%ifarch sparc64
-	gzip -9c vmlinux > %{temp_boot}/vmlinuz-%{buildrel}
-%else
-	cp -f arch/%{target_arch}/boot/bzImage %{temp_boot}/vmlinuz-%{buildrel}
-%endif
+cp -f arch/%{target_arch}/boot/bzImage %{temp_boot}/vmlinuz-%{buildrel}
 
 # Install modules
 install -d %{temp_modules}/%{buildrel}
@@ -579,7 +573,7 @@ chmod -R a+rX %{target_source}
 
 # first architecture files
 for i in alpha arm avr32 blackfin cris frv h8300 ia64 mips microblaze m32r m68k \
-	 m68knommu mn10300 parisc powerpc ppc sh sh64 s390 v850 xtensa score; do
+	 m68knommu mn10300 parisc powerpc ppc sh sh64 sparc s390 v850 xtensa score; do
 	rm -rf %{target_source}/arch/$i
 
 %if %build_devel
@@ -592,12 +586,6 @@ done
 	rm -rf %{target_source}/arch/x86
 %if %build_devel
 	rm -rf %{target_devel}/arch/x86
-%endif
-%endif
-%ifnarch sparc sparc64
-	rm -rf %{target_source}/arch/sparc
-%if %build_devel
-	rm -rf %{target_devel}/arch/sparc
 %endif
 %endif
 
@@ -783,9 +771,6 @@ exit 0
 %{_kerneldir}/README
 %{_kerneldir}/REPORTING-BUGS
 %{_kerneldir}/arch/Kconfig
-%ifarch sparc sparc64
-%{_kerneldir}/arch/sparc
-%endif
 %ifarch %{ix86} x86_64
 %{_kerneldir}/arch/x86
 %endif
@@ -844,9 +829,6 @@ exit 0
 %{_develdir}/Makefile
 %{_develdir}/Module.symvers
 %{_develdir}/arch/Kconfig
-%ifarch sparc sparc64
-%{_develdir}/arch/sparc
-%endif
 %ifarch %{ix86} x86_64
 %{_develdir}/arch/x86
 %endif
