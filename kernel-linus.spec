@@ -572,8 +572,9 @@ chmod -R a+rX %{target_source}
 # we remove all the source files that we don't ship
 
 # first architecture files
-for i in alpha arm avr32 blackfin cris frv h8300 ia64 mips microblaze m32r m68k \
-	 m68knommu mn10300 parisc powerpc ppc sh sh64 sparc s390 v850 xtensa score; do
+for i in alpha arm avr32 blackfin cris frv h8300 ia64 m32r mips microblaze \
+	m68k m68knommu mn10300 parisc powerpc ppc s390 score sh sh64 sparc \
+	tile v850 xtensa; do
 	rm -rf %{target_source}/arch/$i
 
 %if %build_devel
