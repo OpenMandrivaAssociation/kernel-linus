@@ -175,10 +175,10 @@ Source11:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchl
 ####################################################################
 
 # Defines for the things that are needed for all the kernels
-%define requires1 module-init-tools >= 3.0-7
+%define requires1 module-init-tools >= 3.6-12
 %define requires2 mkinitrd >= 3.4.43-10
 %define requires3 bootloader-utils >= 1.9
-%define requires4 sysfsutils module-init-tools >= 0.9.15
+%define requires4 sysfsutils
 %define requires5 kernel-firmware >= 2.6.27-0.rc2.2mdv
 
 %define kprovides kernel = %{tar_ver}, alsa
