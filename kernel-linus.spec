@@ -310,9 +310,7 @@ Version:        %{kversion}
 Release:        %{rpmrel}
 Summary:	Various documentation bits found in the kernel source
 Group:		Books/Computer books
-%ifarch %{ix86}
-Conflicts:	arch(x86_64)
-%endif
+Buildarch:	noarch
 
 %description -n %{kname}-doc
 This package contains documentation files form the kernel source. Various
