@@ -251,7 +251,7 @@ Version:	%{fakever}
 Release:	%{fakerel}
 Provides:	%{kname}-source, kernel-source = %{kverrel}, kernel-devel = %{kverrel}
 Provides:	%{kname}-source-%{kernelversion}.%{patchlevel}
-Requires:	glibc-devel, ncurses-devel, make, gcc, perl
+Requires:	glibc-devel, ncurses-devel, make, gcc, perl, diffutils
 Summary:	The source code for the Linux kernel
 Group:		Development/Kernel
 Autoreqprov: 	no
