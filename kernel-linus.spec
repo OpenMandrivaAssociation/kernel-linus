@@ -136,8 +136,6 @@ Source1:        ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchl
 
 # This is for disabling mrproper and other targets on -devel rpms
 Source2:	disable-mrproper-in-devel-rpms.patch
-# This disables removal of bounds.h and asm-offsets.h in -devel rpms
-Source3:	kbuild-really-dont-remove-bounds-asm-offsets-headers.patch
 
 Source4:  	README.kernel-sources
 Source5:  	README.MandrivaLinux
@@ -518,9 +516,6 @@ cp -fR drivers/media/dvb/frontends/lgdt330x.h %{temp_devel}/drivers/media/dvb/fr
 
 # add acpica header files, needed for fglrx build
 cp -fR drivers/acpi/acpica/*.h %{temp_devel}/drivers/acpi/acpica/
-
-# Disable bounds.h and asm-offsets.h removal
-patch -p1 -d %{temp_devel} -i %{SOURCE3}
 
 # Check and clean the -devel tree
 pushd %{temp_devel} >/dev/null
