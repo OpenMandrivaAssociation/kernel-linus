@@ -760,6 +760,7 @@ exit 0
 %{_kerneldir}/CREDITS
 %{_kerneldir}/Documentation
 %{_kerneldir}/Kbuild
+%{_kerneldir}/Kconfig
 %{_kerneldir}/MAINTAINERS
 %{_kerneldir}/Makefile
 %{_kerneldir}/README
@@ -820,6 +821,7 @@ exit 0
 %{_develdir}/.config
 %{_develdir}/Documentation
 %{_develdir}/Kbuild
+%{_develdir}/Kconfig
 %{_develdir}/Makefile
 %{_develdir}/Module.symvers
 %{_develdir}/arch/Kconfig
