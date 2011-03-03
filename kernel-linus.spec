@@ -137,8 +137,7 @@ Source1:        ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchl
 # This is for disabling mrproper and other targets on -devel rpms
 Source2:	disable-mrproper-in-devel-rpms.patch
 
-Source4:  	README.kernel-sources
-Source5:  	README.MandrivaLinux
+Source4:       README.kernel-sources
 
 # Kernel defconfigs
 Source20: 	i386_defconfig
@@ -542,7 +541,6 @@ cd %src_dir
 ###
 %install
 install -m 644 %{SOURCE4}  .
-install -m 644 %{SOURCE5}  .
 
 cd %src_dir
 # Directories definition needed for installing
@@ -745,7 +743,6 @@ exit 0
 %{_modulesdir}/%{buildrel}/kernel
 %{_modulesdir}/%{buildrel}/modules.*
 %doc README.kernel-sources
-%doc README.MandrivaLinux
 %endif # build_kernel
 
 # kernel-source
@@ -808,7 +805,6 @@ exit 0
 %{_kerneldir}/usr
 %{_kerneldir}/virt
 %doc README.kernel-sources
-%doc README.MandrivaLinux
 %endif # build_source
 
 # kernel-devel
@@ -869,7 +865,6 @@ exit 0
 %{_develdir}/usr
 %{_develdir}/virt
 %doc README.kernel-sources
-%doc README.MandrivaLinux
 %endif # build_devel
 
 
