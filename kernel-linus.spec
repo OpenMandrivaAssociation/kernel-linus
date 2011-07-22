@@ -784,6 +784,7 @@ exit 0
 %{_kerneldir}/include/pcmcia
 %{_kerneldir}/include/scsi
 %{_kerneldir}/include/sound
+%{_kerneldir}/include/staging
 %{_kerneldir}/include/target
 %{_kerneldir}/include/trace
 %{_kerneldir}/include/video
