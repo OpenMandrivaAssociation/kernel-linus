@@ -5,13 +5,13 @@
 
 %define kernelversion	2
 %define patchlevel	6
-%define sublevel	38
+%define sublevel	39
 
 # kernel Makefile extraversion is substituted by
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit)
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		7
+%define kstable		3
 
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
@@ -565,7 +565,7 @@ chmod -R a+rX %{target_source}
 # first architecture files
 for i in alpha arm avr32 blackfin cris frv h8300 ia64 m32r mips microblaze \
 	m68k m68knommu mn10300 parisc powerpc ppc s390 score sh sh64 sparc \
-	tile v850 xtensa; do
+	tile unicore32 v850 xtensa; do
 	rm -rf %{target_source}/arch/$i
 
 %if %build_devel
@@ -848,6 +848,7 @@ exit 0
 %{_develdir}/include/rdma
 %{_develdir}/include/scsi
 %{_develdir}/include/sound
+%{_develdir}/include/staging
 %{_develdir}/include/target
 %{_develdir}/include/trace
 %{_develdir}/include/video
