@@ -464,10 +464,10 @@ cd %{src_dir}
 %else
 	cp arch/%{target_arch}/defconfig .config
 %endif
-%smake oldconfig
+%smake ARCH=%{target_arch} oldconfig
 
 # Build the kernel
-%kmake all
+%kmake ARCH=%{target_arch} all
 
 # Install kernel
 install -d %{temp_boot}
