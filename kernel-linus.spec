@@ -3,21 +3,21 @@
 # (c) Mandriva
 #
 
-%define kernelversion	2
-%define patchlevel	6
-%define sublevel	39
+%define kernelversion	3
+%define sublevel	0
 
 # kernel Makefile extraversion is substituted by
-# kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit)
-# or stable release (kstable)
+# kpatch/kgit wich are either 0 (empty), stable (kpatch), git (kgit)
 %define kpatch		0
-%define kstable		3
+
+# kernel.org -gitX patch (only the number after "git")
+%define krc		0
 
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
 # this is the releaseversion
-%define mdvrelease 	3
+%define mdvrelease 	1
 
 # This is only to make life easier for people that creates derivated kernels
 # a.k.a name it kernel-tmb :)
@@ -38,18 +38,12 @@
 %define fakever		1
 %define fakerel		%mkrel 1
 
-# When we are using a pre/rc patch, the tarball is a sublevel -1
+# When we are using a rc/git patch
+%define kversion  	%{kernelversion}.%{sublevel}.%{kpatch}
 %if %kpatch
-%define kversion  	%{kernelversion}.%{patchlevel}.%{sublevel}
-%define tar_ver	  	%{kernelversion}.%{patchlevel}.%(expr %{sublevel} - 1)
-%else
-%if %kstable
-%define kversion  	%{kernelversion}.%{patchlevel}.%{sublevel}.%{kstable}
-%define tar_ver   	%{kernelversion}.%{patchlevel}.%{sublevel}
-%else
-%define kversion  	%{kernelversion}.%{patchlevel}.%{sublevel}
 %define tar_ver   	%{kversion}
-%endif
+%else
+%define tar_ver	  	%{kernelversion}.%{sublevel}
 %endif
 %define kverrel   	%{kversion}-%{rpmrel}
 
@@ -131,8 +125,8 @@ URL: 		http://wiki.mandriva.com/en/Docs/Howto/Mandriva_Kernels#kernel-linus
 # Sources
 #
 ### This is for full SRC RPM
-Source0:        ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/linux-%{tar_ver}.tar.bz2
-Source1:        ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/linux-%{tar_ver}.tar.bz2.sign
+Source0:        ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{sublevel}/linux-%{tar_ver}.tar.bz2
+Source1:        ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{sublevel}/linux-%{tar_ver}.tar.bz2.sign
 
 # This is for disabling mrproper and other targets on -devel rpms
 Source2:	disable-mrproper-in-devel-rpms.patch
@@ -152,20 +146,16 @@ Source21: 	x86_64_defconfig
 # Patch0 to Patch100 are for core kernel upgrades.
 #
 
-# Pre linus patch: ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/testing
+# Pre linus patch: ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{sublevel}/testing
 
 %if %kpatch
-Patch1:         ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/testing/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}.bz2
-Source10:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/testing/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}.bz2.sign
-%endif
-%if %kstable
-Patch1:         ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/patch-%{kversion}.bz2
-Source10:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/patch-%{kversion}.bz2.sign
+Patch1:         ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{sublevel}/patch-%{kversion}.bz2
+Source10:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{sublevel}/patch-%{kversion}.bz2.sign
 %endif
 # kernel.org -git
 %if %kgit
-Patch2:         ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}-git%{kgit}.bz2
-Source11:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}-git%{kgit}.bz2.sign
+Patch2:         ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{sublevel}/snapshots/patch-%{kernelversion}.%{sublevel}-%{kpatch}-git%{kgit}.bz2
+Source11:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{sublevel}/snapshots/patch-%{kernelversion}.%{sublevel}-%{kpatch}-git%{kgit}.bz2.sign
 %endif
 
 #END
@@ -247,7 +237,7 @@ http://www.mandriva.com/en/security/kernelupdate
 Version:	%{fakever}
 Release:	%{fakerel}
 Provides:	%{kname}-source, kernel-source = %{kverrel}, kernel-devel = %{kverrel}
-Provides:	%{kname}-source-%{kernelversion}.%{patchlevel}
+Provides:	%{kname}-source-%{kernelversion}.%{sublevel}
 Requires:	glibc-devel, ncurses-devel, make, gcc, perl, diffutils
 Summary:	The source code for the Linux kernel
 Group:		Development/Kernel
@@ -402,9 +392,6 @@ pushd %src_dir
 %if %kpatch
 %patch1 -p1
 %endif
-%if %kstable
-%patch1 -p1
-%endif
 %if %kgit
 %patch2 -p1
 %endif
@@ -423,13 +410,14 @@ install %{SOURCE20} %{build_dir}/linux-%{tar_ver}/arch/x86/configs/
 install %{SOURCE21} %{build_dir}/linux-%{tar_ver}/arch/x86/configs/
 
 # make sure the kernel has the sublevel we know it has...
-LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" linux-%{tar_ver}/Makefile
+LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{kpatch}/" linux-%{tar_ver}/Makefile
 
 
 %build
 # Common target directories
 %define _bootdir /boot
 %define _modulesdir /lib/modules
+%define _firmwaredir /lib/firmware
 %define _kerneldir /usr/src/%{kname}-%{buildrel}
 %define _develdir /usr/src/%{kname}-devel-%{buildrel}
 
@@ -438,6 +426,7 @@ LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" linux-%{tar_ver}/
 %define temp_root %{build_dir}/temp-root
 %define temp_boot %{temp_root}%{_bootdir}
 %define temp_modules %{temp_root}%{_modulesdir}
+%define temp_firmware %{temp_root}%{_firmwaredir}
 %define temp_source %{temp_root}%{_kerneldir}
 %define temp_devel %{temp_root}%{_develdir}
 
@@ -451,11 +440,7 @@ install -d %{temp_root}
 cd %{src_dir}
 
 # make sure EXTRAVERSION says what we want it to say
-%if %kstable
-	LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = .%{kstable}-%{buildrpmrel}/" Makefile
-%else
-	LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{buildrpmrel}/" Makefile
-%endif
+LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = %{?%{krc}:-rc%{krc}}%{?%{kgit}:-git%{kgit}}-%{buildrpmrel}/" Makefile
 
 # Prepare the kernel
 %smake -s mrproper
@@ -479,8 +464,16 @@ cp -f arch/%{target_arch}/boot/bzImage %{temp_boot}/vmlinuz-%{buildrel}
 install -d %{temp_modules}/%{buildrel}
 %smake INSTALL_MOD_PATH=%{temp_root} KERNELRELEASE=%{buildrel} modules_install 
 
-# remove /lib/firmware, we use a separate kernel-firmware
-rm -rf %{temp_root}/lib/firmware
+# OLD COMMENT: remove /lib/firmware, we use a separate kernel-firmware
+# COMMENT: I add it, but clean the firmware dir, because some firmware 
+#          not exist in the official firmware packages
+for i in `%{_bindir}/urpmq -l kernel-firmware | /bin/sort -u | %__grep '^/lib/firmware' | %__sed "s#^/lib/firmware#%{temp_firmware}#g"` ; do
+	[[ -f $i ]] && rm -f $i
+done
+for i in `%{_bindir}/urpmq -l kernel-firmware-extra | /bin/sort -u | %__grep '^/lib/firmware' | %__sed "s#^/lib/firmware#%{temp_firmware}#g"` ; do
+	[[ -f $i ]] && rm -f $i
+done
+find %{temp_firmware} -type d | xargs rmdir --ignore-fail-on-non-empty
 
 # Save devel tree
 %if %build_devel
@@ -590,7 +583,8 @@ rm -f %{target_source}/{.config.old,.config.cmd,.tmp_gas_check,.mailmap,.missing
 
 
 # gzipping modules
-find %{target_modules} -name "*.ko" | %kxargs gzip -9
+#find %{target_modules} -name "*.ko" | %kxargs gzip -9
+find %{target_modules} -name "*.ko" | %kxargs xz --extreme --best
 
 
 # We used to have a copy of PrepareKernel here
@@ -599,7 +593,6 @@ find %{target_modules} -name "*.ko" | %kxargs gzip -9
 for i in %{target_modules}/*; do
   rm -f $i/build $i/source
 done
-
 
 # sniff, if we gzipped all the modules, we change the stamp :(
 # we really need the depmod -ae here
@@ -612,7 +605,7 @@ done
 for i in *; do
 	pushd $i
 	echo "Creating module.description for $i"
-	modules=`find . -name "*.ko.gz"`
+	modules=`find . -name "*.ko.xz"`
 	echo $modules | %kxargs /sbin/modinfo \
 	| perl -lne 'print "$name\t$1" if $name && /^description:\s*(.*)/; $name = $1 if m!^filename:\s*(.*)\.k?o!; $name =~ s!.*/!!' > modules.description
 	popd
@@ -743,6 +736,8 @@ exit 0
 %dir %{_modulesdir}/%{buildrel}/
 %{_modulesdir}/%{buildrel}/kernel
 %{_modulesdir}/%{buildrel}/modules.*
+%dir %{_firmwaredir}
+%{_firmwaredir}
 %doc README.kernel-sources
 %endif # build_kernel
 
@@ -784,7 +779,6 @@ exit 0
 %{_kerneldir}/include/pcmcia
 %{_kerneldir}/include/scsi
 %{_kerneldir}/include/sound
-%{_kerneldir}/include/staging
 %{_kerneldir}/include/target
 %{_kerneldir}/include/trace
 %{_kerneldir}/include/video
@@ -849,7 +843,6 @@ exit 0
 %{_develdir}/include/rdma
 %{_develdir}/include/scsi
 %{_develdir}/include/sound
-%{_develdir}/include/staging
 %{_develdir}/include/target
 %{_develdir}/include/trace
 %{_develdir}/include/video
