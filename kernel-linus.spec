@@ -17,7 +17,7 @@
 %define kgit		0
 
 # this is the releaseversion
-%define mdvrelease 	1
+%define mdvrelease 	2
 
 # This is only to make life easier for people that creates derivated kernels
 # a.k.a name it kernel-tmb :)
@@ -583,8 +583,7 @@ rm -f %{target_source}/{.config.old,.config.cmd,.tmp_gas_check,.mailmap,.missing
 
 
 # gzipping modules
-#find %{target_modules} -name "*.ko" | %kxargs gzip -9
-find %{target_modules} -name "*.ko" | %kxargs xz --extreme --best
+find %{target_modules} -name "*.ko" | %kxargs gzip -9
 
 
 # We used to have a copy of PrepareKernel here
@@ -605,7 +604,7 @@ done
 for i in *; do
 	pushd $i
 	echo "Creating module.description for $i"
-	modules=`find . -name "*.ko.xz"`
+	modules=`find . -name "*.ko.gz"`
 	echo $modules | %kxargs /sbin/modinfo \
 	| perl -lne 'print "$name\t$1" if $name && /^description:\s*(.*)/; $name = $1 if m!^filename:\s*(.*)\.k?o!; $name =~ s!.*/!!' > modules.description
 	popd
