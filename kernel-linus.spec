@@ -4,13 +4,10 @@
 #
 
 %define kernelversion	3
-%define sublevel	0
+%define patchlevel	0
+%define sublevel		1
 
-# kernel Makefile extraversion is substituted by
-# kpatch/kgit wich are either 0 (empty), stable (kpatch), git (kgit)
-%define kpatch		1
-
-# kernel.org -gitX patch (only the number after "git")
+# kernel.org -rcX patch (only the number after "rc")
 %define krc		0
 
 # kernel.org -gitX patch (only the number after "git")
@@ -24,34 +21,28 @@
 %define kname 		kernel-linus
 
 %define rpmtag		%distsuffix
-%if %kpatch
-%if %kgit
-%define rpmrel		%mkrel 0.%{kpatch}.%{kgit}.%{mdvrelease}
-%else
-%define rpmrel		%mkrel 0.%{kpatch}.%{mdvrelease}
-%endif
+
+%if %krc || %kgit
+%define	rpmrel		%mkrel %{?%{krc}:-rc%{krc}}%{?%{kgit}:-git%{kgit}}-%{mdvrelease}
 %else
 %define rpmrel		%mkrel %{mdvrelease}
 %endif
+
 
 # theese two never change, they are used to fool rpm/urpmi/smart
 %define fakever		1
 %define fakerel		%mkrel 1
 
 # When we are using a rc/git patch
-%define kversion  	%{kernelversion}.%{sublevel}.%{kpatch}
-%define tar_ver	  	%{kernelversion}.%{sublevel}
+%define kversion  	%{kernelversion}.%{patchlevel}.%{sublevel}
+%define tar_ver	  	%{kernelversion}.%{patchlevel}
 %define kverrel   	%{kversion}-%{rpmrel}
 
 # used for not making too long names for rpms or search paths
-%if %kpatch
-%if %kgit
-%define buildrpmrel     0.%{kpatch}.%{kgit}.%{mdvrelease}%{rpmtag}
+%if %krc || %kgit
+%define buildrpmrel	0%{?%{krc}:.rc%{krc}}%{?%{kgit}:.git%{kgit}}.%{mdvrelease}%{rpmtag}
 %else
-%define buildrpmrel     0.%{kpatch}.%{mdvrelease}%{rpmtag}
-%endif
-%else
-%define buildrpmrel     %{mdvrelease}%{rpmtag}
+%define	buildrpmrel	%{mdvrelease}%{rpmtag}
 %endif
 
 %define buildrel        %{kversion}-%{buildrpmrel}
@@ -121,8 +112,8 @@ URL: 		http://wiki.mandriva.com/en/Docs/Howto/Mandriva_Kernels#kernel-linus
 # Sources
 #
 ### This is for full SRC RPM
-Source0:        ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{sublevel}/linux-%{tar_ver}.tar.bz2
-Source1:        ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{sublevel}/linux-%{tar_ver}.tar.bz2.sign
+Source0:        ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/linux-%{tar_ver}.tar.bz2
+Source1:        ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/linux-%{tar_ver}.tar.bz2.sign
 
 # This is for disabling mrproper and other targets on -devel rpms
 Source2:	disable-mrproper-in-devel-rpms.patch
@@ -142,16 +133,16 @@ Source21: 	x86_64_defconfig
 # Patch0 to Patch100 are for core kernel upgrades.
 #
 
-# Pre linus patch: ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{sublevel}/testing
+# Pre linus patch: ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/testing
 
-%if %kpatch
-Patch1:         ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{sublevel}/patch-%{kversion}.bz2
-Source10:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{sublevel}/patch-%{kversion}.bz2.sign
+%if %sublevel
+Patch1:         ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/patch-%{kversion}.bz2
+Source10:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/patch-%{kversion}.bz2.sign
 %endif
 # kernel.org -git
 %if %kgit
-Patch2:         ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{sublevel}/snapshots/patch-%{kernelversion}.%{sublevel}-%{kpatch}-git%{kgit}.bz2
-Source11:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{sublevel}/snapshots/patch-%{kernelversion}.%{sublevel}-%{kpatch}-git%{kgit}.bz2.sign
+Patch2:         ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}-%{sublevel}-git%{kgit}.bz2
+Source11:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}-%{sublevel}-git%{kgit}.bz2.sign
 %endif
 
 #END
@@ -233,7 +224,7 @@ http://www.mandriva.com/en/security/kernelupdate
 Version:	%{fakever}
 Release:	%{fakerel}
 Provides:	%{kname}-source, kernel-source = %{kverrel}, kernel-devel = %{kverrel}
-Provides:	%{kname}-source-%{kernelversion}.%{sublevel}
+Provides:	%{kname}-source-%{kernelversion}.%{patchlevel}
 Requires:	glibc-devel, ncurses-devel, make, gcc, perl, diffutils
 Summary:	The source code for the Linux kernel
 Group:		Development/Kernel
@@ -385,7 +376,7 @@ latest %{kname}-devel installed...
 %setup -q -n %top_dir_name -c
 
 pushd %src_dir
-%if %kpatch
+%if %sublevel
 %patch1 -p1
 %endif
 %if %kgit
@@ -405,8 +396,8 @@ popd
 install %{SOURCE20} %{build_dir}/linux-%{tar_ver}/arch/x86/configs/
 install %{SOURCE21} %{build_dir}/linux-%{tar_ver}/arch/x86/configs/
 
-# make sure the kernel has the sublevel we know it has...
-LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{kpatch}/" linux-%{tar_ver}/Makefile
+# make sure the kernel has the patchlevel we know it has...
+LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" linux-%{tar_ver}/Makefile
 
 
 %build
