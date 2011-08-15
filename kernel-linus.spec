@@ -35,13 +35,14 @@
 
 # When we are using a rc/git patch
 %define kversion  	%{kernelversion}.%{patchlevel}.%{sublevel}
-%define tar_ver	  	%{kernelversion}.%{patchlevel}
 %define kverrel   	%{kversion}-%{rpmrel}
 
 # used for not making too long names for rpms or search paths
 %if %krc || %kgit
+%define tar_ver	  	%{kernelversion}.%(expr %{patchlevel} - 1)
 %define buildrpmrel	0%{?%{krc}:.rc%{krc}}%{?%{kgit}:.git%{kgit}}.%{mdvrelease}%{rpmtag}
 %else
+%define tar_ver	  	%{kernelversion}.%{patchlevel}
 %define	buildrpmrel	%{mdvrelease}%{rpmtag}
 %endif
 
