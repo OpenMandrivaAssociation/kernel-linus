@@ -5,7 +5,7 @@
 
 %define kernelversion	3
 %define patchlevel	0
-%define sublevel		1
+%define sublevel	2
 
 # kernel.org -rcX patch (only the number after "rc")
 %define krc		0
@@ -14,7 +14,7 @@
 %define kgit		0
 
 # this is the releaseversion
-%define mdvrelease 	3
+%define mdvrelease 	1
 
 # This is only to make life easier for people that creates derivated kernels
 # a.k.a name it kernel-tmb :)
