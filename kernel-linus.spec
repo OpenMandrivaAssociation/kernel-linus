@@ -14,7 +14,7 @@
 %define kgit		0
 
 # this is the releaseversion
-%define mdvrelease 	4
+%define mdvrelease 	5
 
 # This is only to make life easier for people that creates derivated kernels
 # a.k.a name it kernel-tmb :)
