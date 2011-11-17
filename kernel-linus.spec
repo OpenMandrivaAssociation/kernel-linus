@@ -4,8 +4,8 @@
 #
 
 %define kernelversion	3
-%define patchlevel	0
-%define sublevel	9
+%define patchlevel	1
+%define sublevel	1
 
 # kernel.org -rcX patch (only the number after "rc")
 %define krc		0
@@ -113,8 +113,8 @@ URL: 		http://wiki.mandriva.com/en/Docs/Howto/Mandriva_Kernels#kernel-linus
 # Sources
 #
 ### This is for full SRC RPM
-Source0:        http://www.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/linux-%{tar_ver}.tar.bz2
-Source1:        http://www.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/linux-%{tar_ver}.tar.bz2.sign
+Source0:        http://www.kernel.org/pub/linux/kernel/v%{kernelversion}.0/linux-%{tar_ver}.tar.bz2
+Source1:        http://www.kernel.org/pub/linux/kernel/v%{kernelversion}.0/linux-%{tar_ver}.tar.bz2.sign
 
 # This is for disabling mrproper and other targets on -devel rpms
 Source2:	disable-mrproper-in-devel-rpms.patch
@@ -137,8 +137,8 @@ Source21: 	x86_64_defconfig
 # Pre linus patch: ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/testing
 
 %if %sublevel
-Patch1:         http://www.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/patch-%{kversion}.bz2
-Source10:       http://www.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/patch-%{kversion}.bz2.sign
+Patch1:         http://www.kernel.org/pub/linux/kernel/v%{kernelversion}.0/patch-%{kversion}.bz2
+Source10:       http://www.kernel.org/pub/linux/kernel/v%{kernelversion}.0/patch-%{kversion}.bz2.sign
 %endif
 # kernel.org -git
 %if %kgit
@@ -545,8 +545,8 @@ chmod -R a+rX %{target_source}
 
 # first architecture files
 for i in alpha arm avr32 blackfin cris frv h8300 ia64 m32r mips microblaze \
-	m68k m68knommu mn10300 parisc powerpc ppc s390 score sh sh64 sparc \
-	tile unicore32 v850 xtensa; do
+	m68k m68knommu mn10300 openrisc parisc powerpc ppc s390 score sh \
+	sh64 sparc tile unicore32 v850 xtensa; do
 	rm -rf %{target_source}/arch/$i
 
 %if %build_devel
