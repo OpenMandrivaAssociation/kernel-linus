@@ -53,7 +53,7 @@
 # having different top level names for packges means that you have to remove them by hard :(
 %define top_dir_name    %{kname}-%{_arch}
 
-%define build_dir       ${RPM_BUILD_DIR}/%{top_dir_name}
+%define build_dir       %{_builddir}/%{top_dir_name}
 %define src_dir         %{build_dir}/linux-%{tar_ver}
 
 # disable useless debug rpms...
