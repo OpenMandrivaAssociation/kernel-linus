@@ -544,9 +544,9 @@ chmod -R a+rX %{target_source}
 # we remove all the source files that we don't ship
 
 # first architecture files
-for i in alpha arm avr32 blackfin cris frv h8300 ia64 m32r mips microblaze \
-	m68k m68knommu mn10300 openrisc parisc powerpc ppc s390 score sh \
-	sh64 sparc tile unicore32 v850 xtensa; do
+for i in alpha arm avr32 blackfin cris frv h8300 hexagon ia64 m32r mips \
+	microblaze m68k m68knommu mn10300 openrisc parisc powerpc ppc \
+	s390 score sh sh64 sparc tile unicore32 v850 xtensa; do
 	rm -rf %{target_source}/arch/$i
 
 %if %build_devel
@@ -770,6 +770,7 @@ exit 0
 %{_kerneldir}/include/trace
 %{_kerneldir}/include/video
 %{_kerneldir}/include/media
+%{_kerneldir}/include/misc
 %{_kerneldir}/include/mtd
 %{_kerneldir}/include/rxrpc
 %{_kerneldir}/include/keys
@@ -824,6 +825,7 @@ exit 0
 %{_develdir}/include/keys
 %{_develdir}/include/linux
 %{_develdir}/include/math-emu
+%{_develdir}/include/misc
 %{_develdir}/include/mtd
 %{_develdir}/include/net
 %{_develdir}/include/pcmcia
