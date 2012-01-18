@@ -4,8 +4,8 @@
 #
 
 %define kernelversion	3
-%define patchlevel	1
-%define sublevel	9
+%define patchlevel	2
+%define sublevel	1
 
 # kernel.org -rcX patch (only the number after "rc")
 %define krc		0
@@ -113,8 +113,8 @@ URL: 		http://wiki.mandriva.com/en/Docs/Howto/Mandriva_Kernels#kernel-linus
 # Sources
 #
 ### This is for full SRC RPM
-Source0:        ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.0/linux-%{tar_ver}.tar.bz2
-Source1:        ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.0/linux-%{tar_ver}.tar.bz2.sign
+Source0:        ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.0/linux-%{tar_ver}.tar.xz
+Source1:        ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.0/linux-%{tar_ver}.tar.sign
 
 # This is for disabling mrproper and other targets on -devel rpms
 Source2:	disable-mrproper-in-devel-rpms.patch
@@ -142,8 +142,8 @@ Source10:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.0/patch-
 %endif
 # kernel.org -git
 %if %kgit
-Patch2:         ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}-%{sublevel}-git%{kgit}.bz2
-Source11:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}-%{sublevel}-git%{kgit}.bz2.sign
+Patch2:         ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}-%{sublevel}-git%{kgit}.xz
+Source11:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}-%{sublevel}-git%{kgit}.sign
 %endif
 
 #END
