@@ -723,7 +723,6 @@ exit 0
 %dir %{_modulesdir}/%{buildrel}/
 %{_modulesdir}/%{buildrel}/kernel
 %{_modulesdir}/%{buildrel}/modules.*
-%dir %{_firmwaredir}
 %{_firmwaredir}
 %doc README.kernel-sources
 %endif # build_kernel
