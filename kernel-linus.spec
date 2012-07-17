@@ -498,10 +498,12 @@ cp -fR drivers/media/dvb/frontends/lgdt330x.h %{temp_devel}/drivers/media/dvb/fr
 cp -fR drivers/acpi/acpica/*.h %{temp_devel}/drivers/acpi/acpica/
 
 # Need
+%ifarch %{ix86} x86_64
 cp -fR arch/x86/syscalls/* %{temp_devel}/arch/x86/syscalls/
 cp -fR arch/x86/tools/* %{temp_devel}/arch/x86/tools/
+%endif
 cp -fR tools/include %{temp_devel}/tools/
-
+cp -fR Documentation/DocBook/media/*.b64 %{temp_devel}/Documentation/DocBook/media/
 
 # Check and clean the -devel tree
 pushd %{temp_devel} >/dev/null
