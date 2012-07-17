@@ -497,6 +497,12 @@ cp -fR drivers/media/dvb/frontends/lgdt330x.h %{temp_devel}/drivers/media/dvb/fr
 # add acpica header files, needed for fglrx build
 cp -fR drivers/acpi/acpica/*.h %{temp_devel}/drivers/acpi/acpica/
 
+# Need
+cp -fR arch/x86/syscalls/* %{temp_devel}/arch/x86/syscalls/
+cp -fR arch/x86/tools/* %{temp_devel}/arch/x86/tools/
+cp -fR tools/include %{temp_devel}/tools/
+
+
 # Check and clean the -devel tree
 pushd %{temp_devel} >/dev/null
     %smake -s prepare scripts clean
