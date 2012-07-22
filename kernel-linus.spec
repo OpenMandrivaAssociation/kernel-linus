@@ -769,6 +769,7 @@ exit 0
 %{_kerneldir}/include/drm
 %{_kerneldir}/include/linux
 %{_kerneldir}/include/math-emu
+%{_kerneldir}/include/memory
 %{_kerneldir}/include/net
 %{_kerneldir}/include/pcmcia
 %{_kerneldir}/include/scsi
@@ -833,6 +834,7 @@ exit 0
 %{_develdir}/include/linux
 %{_develdir}/include/math-emu
 %{_develdir}/include/misc
+%{_develdir}/include/memory
 %{_develdir}/include/mtd
 %{_develdir}/include/net
 %{_develdir}/include/pcmcia
