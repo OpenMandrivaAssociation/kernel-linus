@@ -4,8 +4,8 @@
 #
 
 %define kernelversion	3
-%define patchlevel	5
-%define sublevel	0
+%define patchlevel	4
+%define sublevel	7
 
 # kernel.org -rcX patch (only the number after "rc")
 %define krc		0
@@ -158,7 +158,6 @@ Source11:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchl
 
 %define kprovides kernel = %{tar_ver}, alsa
 
-BuildRoot: 	%{_tmppath}/%{name}-%{kversion}-build-%{_arch}
 Autoreqprov: 	no
 BuildRequires: 	gcc module-init-tools >= 0.9.15
 
@@ -769,7 +768,7 @@ exit 0
 %{_kerneldir}/include/drm
 %{_kerneldir}/include/linux
 %{_kerneldir}/include/math-emu
-%{_kerneldir}/include/memory
+#%{_kerneldir}/include/memory
 %{_kerneldir}/include/net
 %{_kerneldir}/include/pcmcia
 %{_kerneldir}/include/scsi
@@ -834,7 +833,7 @@ exit 0
 %{_develdir}/include/linux
 %{_develdir}/include/math-emu
 %{_develdir}/include/misc
-%{_develdir}/include/memory
+#%{_develdir}/include/memory
 %{_develdir}/include/mtd
 %{_develdir}/include/net
 %{_develdir}/include/pcmcia
