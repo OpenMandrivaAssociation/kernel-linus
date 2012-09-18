@@ -399,6 +399,8 @@ install %{SOURCE21} %{build_dir}/linux-%{tar_ver}/arch/x86/configs/
 # make sure the kernel has the patchlevel we know it has...
 LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" linux-%{tar_ver}/Makefile
 
+# switching back to ld.bfd May be it is not the best solution, but it works.
+sed -i '/^LD/s/ld$/ld.bfd/' %{build_dir}/linux-%{tar_ver}/Makefile
 
 %build
 # Common target directories
