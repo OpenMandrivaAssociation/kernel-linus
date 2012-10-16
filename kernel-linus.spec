@@ -779,10 +779,12 @@ exit 0
 %{_kerneldir}/include/trace
 %{_kerneldir}/include/video
 %{_kerneldir}/include/media
+%{_kerneldir}/include/memory
 %{_kerneldir}/include/misc
 %{_kerneldir}/include/mtd
 %{_kerneldir}/include/rxrpc
 %{_kerneldir}/include/keys
+%{_kerneldir}/include/ras
 %{_kerneldir}/include/rdma
 %{_kerneldir}/include/xen
 %{_kerneldir}/init
@@ -835,7 +837,7 @@ exit 0
 %{_develdir}/include/linux
 %{_develdir}/include/math-emu
 %{_develdir}/include/misc
-#%{_develdir}/include/memory
+%{_develdir}/include/memory
 %{_develdir}/include/mtd
 %{_develdir}/include/net
 %{_develdir}/include/pcmcia
@@ -846,6 +848,7 @@ exit 0
 %{_develdir}/include/trace
 %{_develdir}/include/video
 %{_develdir}/include/media
+%{_develdir}/include/ras
 %{_develdir}/include/rxrpc
 %{_develdir}/include/xen
 %{_develdir}/init
