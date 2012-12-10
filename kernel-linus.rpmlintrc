@@ -1,0 +1,7 @@
+addFilter("E: non-executable-script")
+# modules in debuginfo package are unstripped
+addFilter("E: unstripped-binary-or-object")
+# there are many empty headers in include/config/
+addFilter("E: zero-length")
+# .gitignore files in source package
+addFilter("E: version-control-internal-file")

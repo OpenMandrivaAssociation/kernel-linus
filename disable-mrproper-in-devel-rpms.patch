@@ -1,0 +1,88 @@
+
+ Makefile                 |   20 ++++++++++++--------
+ scripts/kconfig/Makefile |    8 --------
+ 2 files changed, 12 insertions(+), 16 deletions(-)
+
+diff -Nurp linux-2.6.38-rc7/Makefile linux-2.6.38-rc7-mrproper/Makefile
+--- linux-2.6.38-rc7/Makefile	2011-03-03 13:34:05.463633577 +0200
++++ linux-2.6.38-rc7-mrproper/Makefile	2011-03-03 13:36:17.885005492 +0200
+@@ -486,8 +486,9 @@
+ # Carefully list dependencies so we do not try to build scripts twice
+ # in parallel
+ PHONY += scripts
+-scripts: scripts_basic include/config/auto.conf include/config/tristate.conf
+-	$(Q)$(MAKE) $(build)=$(@)
++#scripts: scripts_basic include/config/auto.conf include/config/tristate.conf
++#	$(Q)$(MAKE) $(build)=$(@)
++scripts:
+ 
+ # Objects we will link into vmlinux / subdirs we need to visit
+ init-y		:= init/
+@@ -960,7 +961,8 @@
+ 	$(Q)$(MAKE) $(build)=. missing-syscalls
+ 
+ # All the preparing..
+-prepare: prepare0
++#prepare: prepare0
++prepare:
+ 
+ # Generate some files
+ # ---------------------------------------------------------------------------
+@@ -1158,11 +1160,13 @@
+                 .tmp_kallsyms* .tmp_version .tmp_vmlinux* .tmp_System.map
+ 
+ # Directories & files removed with 'make mrproper'
+-MRPROPER_DIRS  += include/config usr/include include/generated          \
+-                  arch/*/include/generated
+-MRPROPER_FILES += .config .config.old .version .old_version             \
+-                  include/linux/version.h                               \
+-		  Module.symvers tags TAGS cscope* GPATH GTAGS GRTAGS GSYMS
++#MRPROPER_DIRS  += include/config usr/include include/generated          \
++#                  arch/*/include/generated
++#MRPROPER_FILES += .config .config.old .version .old_version             \
++#                  include/linux/version.h                               \
++#		  Module.symvers tags TAGS cscope* GPATH GTAGS GRTAGS GSYMS
++MRPROPER_DIRS	+= ""
++MRPROPER_FILES	+= ""
+ 
+ # clean - Delete most, but leave enough to build external modules
+ #
+@@ -1157,7 +1161,7 @@
+ #
+ mrproper: rm-dirs  := $(wildcard $(MRPROPER_DIRS))
+ mrproper: rm-files := $(wildcard $(MRPROPER_FILES))
+-mrproper-dirs      := $(addprefix _mrproper_,Documentation/DocBook scripts)
++mrproper-dirs      := $(addprefix _mrproper_,Documentation/DocBook)
+ 
+ PHONY += $(mrproper-dirs) mrproper archmrproper
+ $(mrproper-dirs):
+diff -Nurp linux-2.6.38-rc7/scripts/kconfig/Makefile linux-2.6.38-rc7-mrproper/scripts/kconfig/Makefile
+--- linux-2.6.38-rc7/scripts/kconfig/Makefile	2011-01-05 02:50:19.000000000 +0200
++++ linux-2.6.38-rc7-mrproper/scripts/kconfig/Makefile	2011-03-03 13:36:17.903006594 +0200
+@@ -12,26 +12,18 @@ Kconfig := Kconfig
+ endif
+ 
+ xconfig: $(obj)/qconf
+-	$< $(Kconfig)
+ 
+ gconfig: $(obj)/gconf
+-	$< $(Kconfig)
+ 
+ menuconfig: $(obj)/mconf
+-	$< $(Kconfig)
+ 
+ config: $(obj)/conf
+-	$< --oldaskconfig $(Kconfig)
+ 
+ nconfig: $(obj)/nconf
+-	$< $(Kconfig)
+ 
+ oldconfig: $(obj)/conf
+-	$< --$@ $(Kconfig)
+ 
+ silentoldconfig: $(obj)/conf
+-	$(Q)mkdir -p include/generated
+-	$< --$@ $(Kconfig)
+ 
+ # if no path is given, then use src directory to find file
+ ifdef LSMOD
