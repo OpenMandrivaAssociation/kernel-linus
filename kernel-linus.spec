@@ -23,15 +23,15 @@
 %define rpmtag		%distsuffix
 
 %if %krc || %kgit
-%define	rpmrel		%mkrel %{?%{krc}:-rc%{krc}}%{?%{kgit}:-git%{kgit}}-%{mdvrelease}
+%define	rpmrel		%{?%{krc.1}:-rc%{krc}}%{?%{kgit}:-git%{kgit}}-%{mdvrelease}
 %else
-%define rpmrel		%mkrel %{mdvrelease}
+%define rpmrel		%{mdvrelease.1}
 %endif
 
 
 # theese two never change, they are used to fool rpm/urpmi/smart
 %define fakever		1
-%define fakerel		%mkrel 1
+%define fakerel		2
 
 # When we are using a rc/git patch
 %define kversion  	%{kernelversion}.%{patchlevel}.%{sublevel}
